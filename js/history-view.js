@@ -1,0 +1,261 @@
+// Visual Goal History & Interactive Heatmap Controller
+
+class HistoryViewer {
+  constructor() {
+    this.currentCalendarMonth = new Date().getMonth();
+    this.currentCalendarYear = new Date().getFullYear();
+  }
+
+  // Render 52-Week Contribution Heatmap (365 Days)
+  renderHeatmap(container) {
+    if (!container) return;
+    const daysData = window.storageManager.getDaysData();
+    container.innerHTML = '';
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // 52 weeks = 364 days + today
+    const totalDays = 52 * 7;
+    const startDate = new Date(today);
+    startDate.setDate(startDate.getDate() - totalDays + 1);
+
+    // Align start date to Sunday
+    const startDayOfWeek = startDate.getDay();
+    startDate.setDate(startDate.getDate() - startDayOfWeek);
+
+    const heatmapGrid = document.createElement('div');
+    heatmapGrid.className = 'heatmap-grid';
+
+    // Day labels (Mon, Wed, Fri)
+    const labelsCol = document.createElement('div');
+    labelsCol.className = 'heatmap-labels';
+    labelsCol.innerHTML = `
+      <span>Sun</span>
+      <span>Tue</span>
+      <span>Thu</span>
+      <span>Sat</span>
+    `;
+
+    const weeksWrapper = document.createElement('div');
+    weeksWrapper.className = 'heatmap-weeks';
+
+    let currentDay = new Date(startDate);
+    const dayCells = [];
+
+    for (let w = 0; w < 53; w++) {
+      const weekCol = document.createElement('div');
+      weekCol.className = 'heatmap-week-col';
+
+      for (let d = 0; d < 7; d++) {
+        const y = currentDay.getFullYear();
+        const m = String(currentDay.getMonth() + 1).padStart(2, '0');
+        const dayNum = String(currentDay.getDate()).padStart(2, '0');
+        const dateKey = `${y}-${m}-${dayNum}`;
+
+        const cell = document.createElement('div');
+        cell.className = 'heatmap-cell';
+        cell.setAttribute('data-date', dateKey);
+
+        const record = daysData[dateKey];
+        let completedCount = 0;
+        if (record && record.wins) {
+          completedCount = record.wins.filter(w => w.completed && w.title.trim()).length;
+        }
+
+        cell.setAttribute('data-level', completedCount);
+        const displayDate = window.storageManager.formatDisplayDate(dateKey);
+        cell.title = `${displayDate}: ${completedCount}/3 Wins Completed`;
+
+        cell.addEventListener('click', () => {
+          if (window.jumpToDateAndCloseHistory) {
+            window.jumpToDateAndCloseHistory(dateKey);
+          }
+        });
+
+        weekCol.appendChild(cell);
+        currentDay.setDate(currentDay.getDate() + 1);
+      }
+      weeksWrapper.appendChild(weekCol);
+    }
+
+    heatmapGrid.appendChild(labelsCol);
+    heatmapGrid.appendChild(weeksWrapper);
+    container.appendChild(heatmapGrid);
+
+    // Scroll to end of heatmap
+    setTimeout(() => {
+      weeksWrapper.scrollLeft = weeksWrapper.scrollWidth;
+    }, 50);
+  }
+
+  // Render Monthly Calendar
+  renderMonthlyCalendar(container, monthOffset = 0) {
+    if (!container) return;
+    const daysData = window.storageManager.getDaysData();
+    container.innerHTML = '';
+
+    const targetDate = new Date(this.currentCalendarYear, this.currentCalendarMonth + monthOffset, 1);
+    this.currentCalendarMonth = targetDate.getMonth();
+    this.currentCalendarYear = targetDate.getFullYear();
+
+    const monthName = targetDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+    const header = document.createElement('div');
+    header.className = 'calendar-nav-header';
+    header.innerHTML = `
+      <button id="cal-prev-month" class="date-btn">← Prev</button>
+      <span class="calendar-month-title">${monthName}</span>
+      <button id="cal-next-month" class="date-btn">Next →</button>
+    `;
+    container.appendChild(header);
+
+    const calGrid = document.createElement('div');
+    calGrid.className = 'calendar-grid';
+
+    // Day headers
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    dayNames.forEach(d => {
+      const headerCell = document.createElement('div');
+      headerCell.className = 'cal-day-header';
+      headerCell.textContent = d;
+      calGrid.appendChild(headerCell);
+    });
+
+    const firstDayIndex = targetDate.getDay();
+    const daysInMonth = new Date(this.currentCalendarYear, this.currentCalendarMonth + 1, 0).getDate();
+
+    // Empty lead cells
+    for (let i = 0; i < firstDayIndex; i++) {
+      const emptyCell = document.createElement('div');
+      emptyCell.className = 'cal-cell empty';
+      calGrid.appendChild(emptyCell);
+    }
+
+    const todayKey = window.storageManager.getTodayKey();
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const m = String(this.currentCalendarMonth + 1).padStart(2, '0');
+      const d = String(day).padStart(2, '0');
+      const dateKey = `${this.currentCalendarYear}-${m}-${d}`;
+
+      const cell = document.createElement('div');
+      cell.className = 'cal-cell';
+      if (dateKey === todayKey) cell.classList.add('is-today');
+
+      const record = daysData[dateKey];
+      let completedWins = 0;
+      let totalWinsWithTitle = 0;
+      if (record && record.wins) {
+        completedWins = record.wins.filter(w => w.completed && w.title.trim()).length;
+        totalWinsWithTitle = record.wins.filter(w => w.title.trim()).length;
+      }
+
+      if (completedWins === 3) {
+        cell.classList.add('triple-win-cell');
+      }
+
+      cell.innerHTML = `
+        <span class="cal-day-num">${day}</span>
+        <div class="cal-badge-row">
+          ${completedWins === 3 ? '<span class="cal-trophy">🏆</span>' : ''}
+          ${totalWinsWithTitle > 0 ? `<span class="cal-score ${completedWins === 3 ? 'score-max' : ''}">${completedWins}/3</span>` : ''}
+        </div>
+      `;
+
+      cell.addEventListener('click', () => {
+        if (window.jumpToDateAndCloseHistory) {
+          window.jumpToDateAndCloseHistory(dateKey);
+        }
+      });
+
+      calGrid.appendChild(cell);
+    }
+
+    container.appendChild(calGrid);
+
+    // Event listeners
+    container.querySelector('#cal-prev-month').addEventListener('click', () => {
+      this.renderMonthlyCalendar(container, -1);
+    });
+    container.querySelector('#cal-next-month').addEventListener('click', () => {
+      this.renderMonthlyCalendar(container, 1);
+    });
+  }
+
+  // Render Searchable Victory Journal
+  renderJournal(container, searchQuery = '') {
+    if (!container) return;
+    const daysData = window.storageManager.getDaysData();
+    container.innerHTML = '';
+
+    const sortedDates = Object.keys(daysData).sort().reverse();
+    const filteredDates = sortedDates.filter(dk => {
+      const day = daysData[dk];
+      const winsMatch = day.wins.some(w => w.title.toLowerCase().includes(searchQuery.toLowerCase()));
+      const reflectionMatch = day.reflection && day.reflection.toLowerCase().includes(searchQuery.toLowerCase());
+      return !searchQuery || winsMatch || reflectionMatch;
+    });
+
+    if (filteredDates.length === 0) {
+      container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No matching accomplishments found.</div>`;
+      return;
+    }
+
+    filteredDates.forEach(dk => {
+      const day = daysData[dk];
+      const completedCount = day.wins.filter(w => w.completed && w.title.trim()).length;
+      if (completedCount === 0 && !day.reflection) return;
+
+      const card = document.createElement('div');
+      card.className = 'journal-card';
+
+      let winsHtml = '';
+      day.wins.forEach((w, i) => {
+        if (w.title.trim()) {
+          winsHtml += `
+            <div class="journal-win-row ${w.completed ? 'completed' : ''}">
+              <span>${w.completed ? '✅' : '⬜'}</span>
+              <span style="font-weight:500;">Win #${i + 1}:</span>
+              <span>${escapeHtml(w.title)}</span>
+            </div>
+          `;
+        }
+      });
+
+      card.innerHTML = `
+        <div class="journal-card-header">
+          <span class="journal-date">${window.storageManager.formatDisplayDate(dk)}</span>
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            ${completedCount === 3 ? '<span class="today-pill" style="background:rgba(245,158,11,0.15); color:var(--accent-amber);">🏆 Triple Win</span>' : ''}
+            <span class="win-count-text" style="font-size:0.85rem;">${completedCount}/3</span>
+            <button class="date-btn" data-jump-journal="${dk}" style="font-size:0.75rem;">Open Day →</button>
+          </div>
+        </div>
+        <div class="journal-wins-body">
+          ${winsHtml}
+        </div>
+        ${day.reflection ? `<div class="journal-reflection-note">💭 <em>"${escapeHtml(day.reflection)}"</em></div>` : ''}
+      `;
+
+      container.appendChild(card);
+    });
+
+    container.querySelectorAll('[data-jump-journal]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dk = btn.getAttribute('data-jump-journal');
+        if (window.jumpToDateAndCloseHistory) {
+          window.jumpToDateAndCloseHistory(dk);
+        }
+      });
+    });
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+window.historyViewer = new HistoryViewer();
