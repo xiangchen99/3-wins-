@@ -1,5 +1,5 @@
 /* ===================================================================
-   THREE WINS FOCUS TRACKER - ENHANCED DESIGN SYSTEM & PWA
+   THREE WINS FOCUS TRACKER - DUAL-DESIGN SYSTEM (DESKTOP & MOBILE PWA)
    =================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -10,6 +10,7 @@
   --bg-card: #121824;
   --bg-card-hover: #171f30;
   --bg-card-completed: #0e201d;
+  --bg-dock: rgba(18, 24, 36, 0.88);
   --border-subtle: #1e293b;
   --border-focus: #3b82f6;
   --border-completed: #10b98144;
@@ -54,6 +55,7 @@
   --bg-card: #ffffff;
   --bg-card-hover: #f1f5f9;
   --bg-card-completed: #f0fdf4;
+  --bg-dock: rgba(255, 255, 255, 0.92);
   --border-subtle: #e2e8f0;
   --border-focus: #3b82f6;
   --border-completed: #86efac;
@@ -83,6 +85,7 @@
   --bg-card: #0c1e14;
   --bg-card-hover: #122a1d;
   --bg-card-completed: #0f2e1f;
+  --bg-dock: rgba(12, 30, 20, 0.9);
   --border-subtle: #193d2b;
   --border-focus: #10b981;
   --border-completed: #34d39966;
@@ -127,7 +130,6 @@ html, body {
   transition: background-color var(--transition-normal), color var(--transition-normal);
   overflow-x: hidden;
   padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
 }
@@ -145,34 +147,36 @@ button {
   user-select: none;
 }
 
-/* Layout App Container */
+/* Base App Layout */
 .app-container {
-  max-width: 900px;
+  max-width: 880px;
   margin: 0 auto;
-  padding: 1.75rem 1.25rem 5rem;
+  padding: 2rem 1.5rem 6rem;
   display: flex;
   flex-direction: column;
   gap: 1.75rem;
   min-height: 100vh;
 }
 
-/* Header & Top Bar */
+/* Top Header */
 .top-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--border-subtle);
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .brand-section {
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  min-width: 0;
 }
 
 .brand-badge {
+  flex-shrink: 0;
   width: 42px;
   height: 42px;
   border-radius: var(--radius-md);
@@ -186,25 +190,33 @@ button {
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
 }
 
+.brand-text-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .brand-title {
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-primary);
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .brand-subtitle {
   font-size: 0.8rem;
   color: var(--text-secondary);
   font-weight: 400;
+  white-space: nowrap;
 }
 
-/* Controls Bar */
 .header-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .icon-btn {
@@ -218,6 +230,7 @@ button {
   border: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
 .icon-btn:hover {
@@ -234,7 +247,7 @@ button {
 .badge-streak {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   padding: 0.4rem 0.85rem;
   border-radius: var(--radius-full);
   background: var(--bg-card);
@@ -242,6 +255,8 @@ button {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--accent-amber);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .badge-streak.active-streak {
@@ -249,20 +264,21 @@ button {
   border-color: rgba(245, 158, 11, 0.3);
 }
 
-/* Sync status badge */
 .sync-badge {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.4rem 0.75rem;
+  padding: 0.4rem 0.85rem;
   border-radius: var(--radius-full);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .sync-badge:hover {
@@ -275,6 +291,7 @@ button {
   height: 7px;
   border-radius: 50%;
   background: #64748b;
+  flex-shrink: 0;
 }
 
 .sync-dot.synced {
@@ -302,18 +319,23 @@ button {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-sm);
+  gap: 0.5rem;
 }
 
 .nav-date-group {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
+  min-width: 0;
 }
 
 .date-text {
   font-size: 1.15rem;
   font-weight: 600;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .today-pill {
@@ -325,21 +347,24 @@ button {
   padding: 0.2rem 0.55rem;
   border-radius: var(--radius-full);
   font-weight: 700;
+  flex-shrink: 0;
 }
 
 .date-nav-controls {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  flex-shrink: 0;
 }
 
 .date-btn {
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.75rem;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   color: var(--text-secondary);
   border: 1px solid transparent;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .date-btn:hover {
@@ -360,6 +385,7 @@ button {
   position: relative;
   overflow: hidden;
   transition: all var(--transition-normal);
+  gap: 1rem;
 }
 
 .progress-banner.triple-win-active {
@@ -372,6 +398,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  min-width: 0;
 }
 
 .progress-title {
@@ -388,6 +415,7 @@ button {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-shrink: 0;
 }
 
 .progress-pills {
@@ -452,7 +480,7 @@ button {
   color: var(--text-muted);
 }
 
-/* Checkbox Toggle Button */
+/* Checkbox Button */
 .win-toggle-btn {
   flex-shrink: 0;
   width: 44px;
@@ -527,6 +555,7 @@ button {
   letter-spacing: 0.06em;
   padding: 0.2rem 0.6rem;
   border-radius: var(--radius-sm);
+  white-space: nowrap;
 }
 
 .tag-win-1 {
@@ -551,7 +580,7 @@ button {
 
 .win-input {
   width: 100%;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 500;
   color: var(--text-primary);
   line-height: 1.4;
@@ -570,6 +599,7 @@ button {
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.35rem;
+  flex-wrap: wrap;
 }
 
 .focus-btn {
@@ -584,6 +614,7 @@ button {
   font-size: 0.8rem;
   font-weight: 500;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .focus-btn:hover {
@@ -599,6 +630,7 @@ button {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text-muted);
+  white-space: nowrap;
 }
 
 .slot-number-badge {
@@ -609,6 +641,7 @@ button {
   padding: 0.15rem 0.45rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-subtle);
+  white-space: nowrap;
 }
 
 /* Daily Reflection Section */
@@ -640,7 +673,7 @@ button {
 .reflection-input {
   width: 100%;
   resize: vertical;
-  min-height: 60px;
+  min-height: 65px;
   font-size: 0.95rem;
   line-height: 1.5;
   color: var(--text-primary);
@@ -655,7 +688,7 @@ button {
   border-color: var(--border-focus);
 }
 
-/* Quick Actions Bottom Bar */
+/* Desktop Bottom Bar */
 .bottom-bar {
   display: flex;
   align-items: center;
@@ -706,12 +739,80 @@ button {
   border-radius: 4px;
 }
 
+/* ===================================================================
+   MOBILE BOTTOM NAVIGATION DOCK (Native App Feel)
+   =================================================================== */
+.mobile-bottom-dock {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-dock);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 0.45rem 0.5rem calc(0.5rem + env(safe-area-inset-bottom));
+  z-index: 1200;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.dock-tab-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  position: relative;
+  min-width: 60px;
+}
+
+.dock-tab-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.dock-tab-btn:active {
+  transform: scale(0.92);
+  color: var(--accent-primary);
+}
+
+.dock-badge {
+  position: absolute;
+  top: 2px;
+  right: 12px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  background: var(--accent-primary);
+  color: #ffffff;
+  padding: 0.1rem 0.35rem;
+  border-radius: var(--radius-full);
+}
+
+.dock-dot {
+  position: absolute;
+  top: 4px;
+  right: 18px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+}
+
 /* MODAL & DRAWER SYSTEM */
 .modal-overlay, .drawer-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   z-index: 1500;
   display: flex;
   align-items: center;
@@ -725,6 +826,15 @@ button {
 .modal-overlay.open, .drawer-overlay.open {
   opacity: 1;
   pointer-events: auto;
+}
+
+.sheet-handle {
+  display: none;
+  width: 38px;
+  height: 4px;
+  background: var(--border-subtle);
+  border-radius: var(--radius-full);
+  margin: -0.5rem auto 0.75rem;
 }
 
 .modal-card {
@@ -748,7 +858,7 @@ button {
 }
 
 .modal-title {
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   font-weight: 700;
   display: flex;
   align-items: center;
@@ -761,15 +871,17 @@ button {
   gap: 0.5rem;
   border-bottom: 1px solid var(--border-subtle);
   padding-bottom: 0.5rem;
+  overflow-x: auto;
 }
 
 .modal-tab-btn {
   padding: 0.45rem 1rem;
   border-radius: var(--radius-md);
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-secondary);
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .modal-tab-btn.active {
@@ -808,6 +920,7 @@ button {
   gap: 3px;
   overflow-x: auto;
   padding-bottom: 0.4rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .heatmap-week-col {
@@ -868,7 +981,7 @@ button {
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .cal-day-header {
@@ -884,12 +997,13 @@ button {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
   aspect-ratio: 1;
-  padding: 0.4rem;
+  padding: 0.35rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   cursor: pointer;
   transition: all var(--transition-fast);
+  min-height: 48px;
 }
 
 .cal-cell:hover {
@@ -920,7 +1034,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
 }
 
 .cal-score {
@@ -955,6 +1069,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .journal-date {
@@ -979,33 +1094,6 @@ button {
   border-left: 2px solid var(--accent-primary);
   padding-left: 0.65rem;
   margin-top: 0.25rem;
-}
-
-/* SYNC MODAL & PAIRING */
-.sync-modal-body {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  align-items: center;
-  text-align: center;
-}
-
-.sync-key-display-box {
-  background: var(--bg-main);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.sync-key-text {
-  font-family: var(--font-mono);
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--accent-primary);
 }
 
 /* PARKING LOT DRAWER */
@@ -1072,6 +1160,7 @@ button {
   font-weight: 600;
   font-size: 0.9rem;
   transition: background-color var(--transition-fast);
+  white-space: nowrap;
 }
 
 .drawer-add-btn:hover {
@@ -1106,6 +1195,7 @@ button {
   display: flex;
   align-items: center;
   gap: 0.35rem;
+  flex-shrink: 0;
 }
 
 .promote-btn {
@@ -1116,6 +1206,7 @@ button {
   font-size: 0.75rem;
   font-weight: 600;
   transition: all var(--transition-fast);
+  white-space: nowrap;
 }
 
 .promote-btn:hover {
@@ -1183,7 +1274,7 @@ button {
 }
 
 .zen-task-title {
-  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  font-size: clamp(1.5rem, 3.5vw, 2.5rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.25;
@@ -1201,7 +1292,9 @@ button {
 .zen-timer-controls {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .zen-main-btn {
@@ -1210,7 +1303,7 @@ button {
   background: var(--accent-primary);
   color: #ffffff;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
   transition: all var(--transition-fast);
 }
@@ -1221,12 +1314,12 @@ button {
 }
 
 .zen-secondary-btn {
-  padding: 0.85rem 1.4rem;
+  padding: 0.85rem 1.3rem;
   border-radius: var(--radius-full);
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--text-secondary);
   transition: all var(--transition-fast);
 }
@@ -1252,6 +1345,7 @@ button {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .ambient-pill {
@@ -1273,35 +1367,35 @@ button {
 /* STATS GRID */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.75rem;
 }
 
 .stat-item {
   background: var(--bg-main);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  padding: 1rem;
+  padding: 0.85rem 0.5rem;
   text-align: center;
 }
 
 .stat-num {
   font-family: var(--font-mono);
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--accent-primary);
 }
 
 .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--text-secondary);
-  margin-top: 0.25rem;
+  margin-top: 0.2rem;
 }
 
 /* Toast notification */
 .toast-msg {
   position: fixed;
-  bottom: 2rem;
+  bottom: calc(4.5rem + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%) translateY(100px);
   background: var(--text-primary);
@@ -1315,6 +1409,7 @@ button {
   transition: transform var(--transition-spring), opacity var(--transition-fast);
   opacity: 0;
   pointer-events: none;
+  white-space: nowrap;
 }
 
 .toast-msg.show {
@@ -1322,30 +1417,148 @@ button {
   opacity: 1;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
+/* ===================================================================
+   MOBILE-OPTIMIZED VIEWPORT RULES (< 768px)
+   =================================================================== */
+@media (max-width: 768px) {
   .app-container {
-    padding: 1rem 1rem 4rem;
+    padding: 1rem 1rem calc(5.5rem + env(safe-area-inset-bottom));
     gap: 1.25rem;
   }
-  .win-card {
-    padding: 1rem;
-    gap: 0.85rem;
+
+  /* Show Bottom Navigation Dock */
+  .mobile-bottom-dock {
+    display: flex;
   }
-  .win-toggle-btn {
-    width: 40px;
-    height: 40px;
+
+  /* Hide redundant desktop top buttons on mobile to avoid overcrowding */
+  .desktop-only-btn {
+    display: none !important;
   }
-  .win-input {
-    font-size: 1.05rem;
+
+  .desktop-bottom-actions {
+    display: none !important;
   }
-  .shortcuts-hint {
-    display: none;
+
+  /* Compact Header */
+  .top-header {
+    padding-bottom: 0.85rem;
+    gap: 0.5rem;
   }
+
+  .brand-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
   .brand-title {
     font-size: 1.15rem;
   }
-  .sync-badge span:last-child {
+
+  .brand-subtitle {
     display: none;
+  }
+
+  .badge-streak {
+    padding: 0.3rem 0.65rem;
+    font-size: 0.8rem;
+  }
+
+  /* Mobile Date Switcher */
+  .date-navigator {
+    padding: 0.6rem 0.85rem;
+    gap: 0.25rem;
+  }
+
+  .date-text {
+    font-size: 0.95rem;
+  }
+
+  .date-btn {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  /* Mobile Card Layout */
+  .win-card {
+    padding: 1rem;
+    gap: 0.85rem;
+    align-items: flex-start;
+  }
+
+  .win-toggle-btn {
+    width: 42px;
+    height: 42px;
+    margin-top: 0.2rem;
+  }
+
+  .win-input {
+    /* 16px is required to strictly prevent iOS Safari viewport zooming on focus */
+    font-size: 16px;
+  }
+
+  .win-tag {
+    font-size: 0.7rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  .slot-number-badge {
+    display: none;
+  }
+
+  /* Bottom Sheets for Modals on Mobile */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-card {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 85vh;
+    border-radius: 22px 22px 0 0;
+    padding: 1.25rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+    border-bottom: none;
+  }
+
+  .sheet-handle {
+    display: block;
+  }
+
+  /* Mobile Drawer (Bottom Sheet) */
+  .drawer-panel {
+    top: auto;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100vw;
+    max-height: 85vh;
+    border-radius: 22px 22px 0 0;
+    border-left: none;
+    border-top: 1px solid var(--border-subtle);
+    transform: translateY(100%);
+    padding: 1.25rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+  }
+
+  .drawer-panel.open {
+    transform: translateY(0);
+  }
+
+  .calendar-grid {
+    gap: 0.25rem;
+  }
+
+  .cal-cell {
+    min-height: 40px;
+    padding: 0.2rem;
+  }
+
+  .cal-day-num {
+    font-size: 0.72rem;
+  }
+
+  .cal-score {
+    font-size: 0.6rem;
   }
 }

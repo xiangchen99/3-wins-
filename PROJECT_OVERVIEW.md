@@ -2,13 +2,14 @@
 
 > **Restricts daily tasks to just 3 core priorities with one-click completion animations, preventing task overload.**
 
-A high-performance, distraction-free Progressive Web App (PWA) with real-time cross-device sync powered by Cloudflare KV. Built with vanilla HTML5, CSS3, and JavaScript for zero bundle overhead, 60fps animations, and instantaneous offline capability.
+A high-performance, distraction-free Progressive Web App (PWA) with real-time cross-device sync powered by Cloudflare KV. Built with vanilla HTML5, CSS3, and JavaScript with two tailored UI designs for desktop and mobile phones.
 
 ---
 
 ## 📑 Table of Contents
-1. [Core Philosophy](#-core-philosophy)
-2. [Features Overview](#-features-overview)
+1. [Dual-Design System (Desktop vs Mobile)](#-dual-design-system)
+2. [Core Philosophy](#-core-philosophy)
+3. [Features Overview](#-features-overview)
    - [Rule-of-3 Daily Task Grid](#1-rule-of-3-daily-task-grid)
    - [One-Click Completion & Celebrations](#2-one-click-completion--celebrations)
    - [Zen Deep Focus Mode](#3-zen-deep-focus-mode)
@@ -17,11 +18,34 @@ A high-performance, distraction-free Progressive Web App (PWA) with real-time cr
    - [Cloudflare KV Cross-Device Sync](#6-cloudflare-kv-cross-device-sync)
    - [PWA & Mobile Native Experience](#7-pwa--mobile-native-experience)
    - [Themes, Standup Export & Shortcuts](#8-themes-standup-export--shortcuts)
-3. [Architecture & File Structure](#-architecture--file-structure)
-4. [Deployment & Setup Guide](#-deployment--setup-guide)
+4. [Architecture & File Structure](#-architecture--file-structure)
+5. [Deployment & Setup Guide](#-deployment--setup-guide)
    - [Cloudflare Pages & KV Setup](#cloudflare-pages--kv-setup)
    - [Phone Installation (iOS & Android)](#phone-installation-ios--android)
-5. [Keyboard Shortcuts](#-keyboard-shortcuts)
+6. [Keyboard Shortcuts](#-keyboard-shortcuts)
+
+---
+
+## 📱🖥️ Dual-Design System
+
+### 💻 1. Desktop / Laptop Design (`>= 768px`)
+- **Spacious Focus Layout**: Centered 880px max-width workspace with clean typography.
+- **Header Actions Bar**: Cloud Sync status, Victory History, Audio toggle, Theme switcher, and Streak badge all accessible at a glance.
+- **Keyboard Productivity**: Built-in hotkeys (`1`, `2`, `3`, `D`, `T`, `M`) and desktop action buttons.
+- **Centered Dialogs**: Glassmorphic modal overlays for analytics and settings.
+
+### 📱 2. Mobile App Design (`< 768px`)
+- **Fixed Bottom Navigation Dock**: Native iOS/Android style bottom bar anchored to the bottom with `env(safe-area-inset-bottom)`:
+  - 📥 **Parking Lot** (with live unread count badge)
+  - 📊 **Goal History** (52-week heatmap & monthly calendar)
+  - ☁️ **Cloud Sync** (with live cloud connection dot)
+  - 📋 **Standup Copy** (1-tap markdown copy for Slack/notes)
+- **Zero Squishing & Cutoffs**:
+  - `42px` fixed-size tactile checkbox button (`flex-shrink: 0`).
+  - Inputs formatted with `16px` font size (strictly prevents iOS Safari from auto-zooming the viewport upon tap).
+  - Compact date navigator (`Prev`, `Today`, `Next`) that fits even 320px–375px screens without text wrapping.
+- **Bottom-Sheet Modals**:
+  - Modals and drawers slide up from the bottom with a native grab handle bar and rounded top corners (`border-radius: 22px 22px 0 0`).
 
 ---
 
@@ -73,13 +97,13 @@ Any additional thoughts, errands, or future tasks are offloaded into the **Parki
 ---
 
 ### 4. Parking Lot / Brain Dump Drawer
-- **Prevents Task Creep**: A slide-over panel (press `D`) to capture secondary todos, sudden thoughts, or errands.
+- **Prevents Task Creep**: A slide-over panel (press `D` or tap bottom tab) to capture secondary todos, sudden thoughts, or errands.
 - **One-Click Promotion (`Promote ↑`)**: Promotes any parked item into an empty Win slot on today's board.
 
 ---
 
 ### 5. Visual Goal History & Heatmap
-Click the **Calendar/History icon** in the top header to access 3 interactive views:
+Click the **Calendar/History icon** or bottom tab to access 3 interactive views:
 1. **52-Week Goal Heatmap**: GitHub-style activity grid showing your daily win consistency across 365 days.
 2. **Monthly Interactive Calendar**: Month-by-month view with 🏆 Triple Win markers. Click any day to jump to that date's log.
 3. **Searchable Victory Journal**: Full-text search across past goals and daily reflections.
@@ -116,14 +140,14 @@ Click the **Calendar/History icon** in the top header to access 3 interactive vi
 ## 📁 Architecture & File Structure
 
 ```
-├── index.html                 # Semantic single-page HTML layout & modals
+├── index.html                 # Semantic single-page HTML layout & dual navigation
 ├── manifest.json              # PWA manifest (app icons, theme colors)
 ├── sw.js                      # Offline caching Service Worker
 ├── functions/
 │   └── api/
 │       └── sync.js            # Cloudflare Pages serverless KV sync endpoint
 ├── css/
-│   └── styles.css             # Design tokens, themes, heatmap & animation styles
+│   └── styles.css             # Dual-design stylesheet (desktop & mobile dock)
 └── js/
     ├── app.js                 # App controller, keyboard shortcuts, PWA lifecycle
     ├── audio.js               # Web Audio API real-time sound synthesizer

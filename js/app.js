@@ -1,4 +1,4 @@
-// Core Application Controller for Three Wins Focus Tracker with Cloudflare Sync & PWA
+// Core Application Controller for Three Wins Focus Tracker with Dual Design
 
 document.addEventListener('DOMContentLoaded', () => {
   // Register Service Worker for PWA
@@ -74,6 +74,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSyncModal = document.getElementById('btn-sync-modal');
   const syncDot = document.getElementById('sync-dot');
   const syncStatusText = document.getElementById('sync-status-text');
+
+  // Mobile Bottom Dock Elements
+  const dockBtnParking = document.getElementById('dock-btn-parking');
+  const dockParkingBadge = document.getElementById('dock-parking-badge');
+  const dockBtnHistory = document.getElementById('dock-btn-history');
+  const dockBtnSync = document.getElementById('dock-btn-sync');
+  const dockSyncDot = document.getElementById('dock-sync-dot');
+  const dockBtnStandup = document.getElementById('dock-btn-standup');
 
   // History Modal Elements
   const btnHistoryModal = document.getElementById('btn-history-modal');
@@ -224,21 +232,29 @@ document.addEventListener('DOMContentLoaded', () => {
   function setupSyncListeners() {
     if (window.syncEngine) {
       window.syncEngine.onSyncUpdate((status) => {
-        if (status === 'syncing') {
-          syncDot.className = 'sync-dot syncing';
-          syncStatusText.textContent = 'Syncing...';
-        } else if (status === 'synced') {
-          syncDot.className = 'sync-dot synced';
-          syncStatusText.textContent = 'Cloud Synced';
-        } else if (status === 'local_only') {
-          syncDot.className = 'sync-dot';
-          syncStatusText.textContent = 'Local Only';
-        } else {
-          syncDot.className = 'sync-dot';
-          syncStatusText.textContent = 'Offline';
+        const isSynced = status === 'synced';
+        const isSyncing = status === 'syncing';
+
+        if (syncDot) {
+          if (isSyncing) {
+            syncDot.className = 'sync-dot syncing';
+            syncStatusText.textContent = 'Syncing...';
+          } else if (isSynced) {
+            syncDot.className = 'sync-dot synced';
+            syncStatusText.textContent = 'Cloud Synced';
+          } else if (status === 'local_only') {
+            syncDot.className = 'sync-dot';
+            syncStatusText.textContent = 'Local Only';
+          } else {
+            syncDot.className = 'sync-dot';
+            syncStatusText.textContent = 'Offline';
+          }
+        }
+
+        if (dockSyncDot) {
+          dockSyncDot.style.background = isSynced ? 'var(--accent-primary)' : isSyncing ? 'var(--accent-amber)' : '#64748b';
         }
       });
-      // Initial status trigger
       window.syncEngine.notifyStatus(window.syncEngine.status);
     }
   }
@@ -339,6 +355,17 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderParkingLot() {
     const items = window.storageManager.getParkingLot();
     parkingCountBadge.textContent = items.length;
+    
+    // Update mobile dock badge
+    if (dockParkingBadge) {
+      if (items.length > 0) {
+        dockParkingBadge.style.display = 'block';
+        dockParkingBadge.textContent = items.length;
+      } else {
+        dockParkingBadge.style.display = 'none';
+      }
+    }
+
     parkingList.innerHTML = '';
 
     if (items.length === 0) {
@@ -430,6 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnOpenParking.addEventListener('click', openParkingDrawer);
   btnCloseDrawer.addEventListener('click', closeParkingDrawer);
   drawerOverlay.addEventListener('click', closeParkingDrawer);
+  if (dockBtnParking) dockBtnParking.addEventListener('click', openParkingDrawer);
 
   /* ===================================================================
      ZEN FOCUS MODE
@@ -582,6 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btnHistoryModal.addEventListener('click', openHistoryModal);
+  if (dockBtnHistory) dockBtnHistory.addEventListener('click', openHistoryModal);
   btnCloseHistoryModal.addEventListener('click', () => historyModalOverlay.classList.remove('open'));
   historyModalOverlay.addEventListener('click', (e) => {
     if (e.target === historyModalOverlay) historyModalOverlay.classList.remove('open');
@@ -631,7 +660,8 @@ document.addEventListener('DOMContentLoaded', () => {
     syncModalOverlay.classList.add('open');
   }
 
-  btnSyncModal.addEventListener('click', openSyncModal);
+  if (btnSyncModal) btnSyncModal.addEventListener('click', openSyncModal);
+  if (dockBtnSync) dockBtnSync.addEventListener('click', openSyncModal);
   btnCloseSyncModal.addEventListener('click', () => syncModalOverlay.classList.remove('open'));
   syncModalOverlay.addEventListener('click', (e) => {
     if (e.target === syncModalOverlay) syncModalOverlay.classList.remove('open');
@@ -707,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
      COPY MARKDOWN FOR STANDUP
      =================================================================== */
 
-  btnCopyMarkdown.addEventListener('click', async () => {
+  async function copyStandupMarkdown() {
     const md = window.storageManager.generateDailyMarkdown(currentDateKey);
     try {
       await navigator.clipboard.writeText(md);
@@ -716,7 +746,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       showToast('⚠️ Could not access clipboard');
     }
-  });
+  }
+
+  btnCopyMarkdown.addEventListener('click', copyStandupMarkdown);
+  if (dockBtnStandup) dockBtnStandup.addEventListener('click', copyStandupMarkdown);
 
   /* ===================================================================
      KEYBOARD SHORTCUTS
