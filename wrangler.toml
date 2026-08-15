@@ -1,7 +1,0 @@
-name = "three-wins-focus-tracker"
-compatibility_date = "2024-01-01"
-pages_build_output_dir = "."
-
-[[kv_namespaces]]
-binding = "THREE_WINS_KV"
-id = "THREE_WINS_KV_ID"
