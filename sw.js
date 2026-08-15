@@ -1,6 +1,6 @@
-// Service Worker for Three Wins Focus Tracker (Offline-First PWA)
+// Service Worker for Three Wins Focus Tracker (Network-First with Offline Fallback)
 
-const CACHE_NAME = 'three-wins-v1.1';
+const CACHE_NAME = 'three-wins-v2.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -33,29 +33,50 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Stale-while-revalidate for local assets, network-first for external/sync APIs
-  const requestUrl = new URL(event.request.url);
+  const request = event.request;
+  const requestUrl = new URL(request.url);
 
+  // Skip non-GET requests and API calls
+  if (request.method !== 'GET' || requestUrl.pathname.startsWith('/api/')) {
+    return;
+  }
+
+  // Network-First for same-origin assets (ensures latest deploy is always served when online)
   if (requestUrl.origin === location.origin) {
     event.respondWith(
-      caches.match(event.request).then((cachedResponse) => {
-        const fetchPromise = fetch(event.request).then((networkResponse) => {
+      fetch(request)
+        .then((networkResponse) => {
           if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
             const responseToCache = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
+              cache.put(request, responseToCache);
             });
           }
           return networkResponse;
-        }).catch(() => cachedResponse);
-
-        return cachedResponse || fetchPromise;
-      })
+        })
+        .catch(() => {
+          // Offline fallback
+          return caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) return cachedResponse;
+            if (request.mode === 'navigate') return caches.match('./index.html');
+            return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+          });
+        })
     );
   } else {
-    // External requests (Google fonts, sync endpoints)
+    // External CDN assets (Google Fonts, Lucide icons)
     event.respondWith(
-      fetch(event.request).catch(() => caches.match(event.request))
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(request))
     );
   }
 });

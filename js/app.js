@@ -1,10 +1,32 @@
 // Core Application Controller for Three Wins Focus Tracker with Shadcn UI + Lucide Icons
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Register Service Worker for PWA
+  // Register Service Worker for PWA with auto-update checks
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(err => {
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      // Check for updates on load
+      reg.update();
+
+      reg.addEventListener('updatefound', () => {
+        const newWorker = reg.installing;
+        if (newWorker) {
+          newWorker.addEventListener('statechange', () => {
+            if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+              window.location.reload();
+            }
+          });
+        }
+      });
+    }).catch(err => {
       console.log('SW registration note:', err);
+    });
+
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!refreshing) {
+        refreshing = true;
+        window.location.reload();
+      }
     });
   }
 
