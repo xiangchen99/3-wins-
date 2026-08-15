@@ -1,4 +1,4 @@
-// Core Application Controller for Three Wins Focus Tracker with Multi-Color Dual Design
+// Core Application Controller for Three Wins Focus Tracker with Shadcn UI + Lucide Icons
 
 document.addEventListener('DOMContentLoaded', () => {
   // Register Service Worker for PWA
@@ -6,6 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
     navigator.serviceWorker.register('sw.js').catch(err => {
       console.log('SW registration note:', err);
     });
+  }
+
+  // Refresh Lucide Icons Helper
+  function refreshIcons() {
+    if (window.lucide && typeof window.lucide.createIcons === 'function') {
+      window.lucide.createIcons();
+    }
   }
 
   // State
@@ -25,6 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNextDay = document.getElementById('btn-next-day');
   const btnPrevDayDesktop = document.getElementById('btn-prev-day-desktop');
   const btnNextDayDesktop = document.getElementById('btn-next-day-desktop');
+  const btnMobileCalendarTrigger = document.getElementById('btn-mobile-calendar-trigger');
+  const btnCurrentDateDesktop = document.getElementById('btn-current-date-desktop');
+
+  // Quick Day Jump Buttons
+  const btnJumpYesterday = document.getElementById('btn-jump-yesterday');
+  const btnJumpToday = document.getElementById('btn-jump-today');
+  const btnJumpTomorrow = document.getElementById('btn-jump-tomorrow');
   
   const streakBadge = document.getElementById('streak-badge');
   const streakCount = document.getElementById('streak-count');
@@ -130,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const zenTaskTitle = document.getElementById('zen-task-title');
   const zenTimerDisplay = document.getElementById('zen-timer-display');
   const btnZenTimerToggle = document.getElementById('btn-zen-timer-toggle');
+  const zenPlayIcon = document.getElementById('zen-play-icon');
   const btnZenTimerReset = document.getElementById('btn-zen-timer-reset');
   const btnZenComplete = document.getElementById('btn-zen-complete');
   const ambientButtons = document.querySelectorAll('[data-ambient]');
@@ -139,11 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
   applyTheme(currentTheme);
   updateSoundIcon();
 
-  // Load and render Initial Data
+  // Load Initial Data
   renderDay(currentDateKey);
   renderParkingLot();
   updateStreakDisplay();
   setupSyncListeners();
+  refreshIcons();
 
   /* ===================================================================
      RENDER FUNCTIONS
@@ -153,15 +169,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const day = window.storageManager.getDayRecord(dateKey);
     const todayKey = window.storageManager.getTodayKey();
 
-    let dateText = 'Today';
-    if (dateKey !== todayKey) {
-      const [y, m, d] = dateKey.split('-').map(Number);
-      const dateObj = new Date(y, m - 1, d);
-      dateText = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    // Format Date Display
+    let dateDisplay = 'Today';
+    const [y, m, d] = dateKey.split('-').map(Number);
+    const dateObj = new Date(y, m - 1, d);
+
+    if (dateKey === todayKey) {
+      dateDisplay = 'Today';
+    } else {
+      dateDisplay = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
-    if (currentDateLabelMobile) currentDateLabelMobile.textContent = dateText;
-    if (currentDateLabelDesktop) currentDateLabelDesktop.textContent = dateText;
+    if (currentDateLabelMobile) currentDateLabelMobile.textContent = dateDisplay;
+    if (currentDateLabelDesktop) currentDateLabelDesktop.textContent = dateDisplay;
+
+    // Update Quick Day Pills Active State
+    updateQuickDayPills(dateKey, todayKey);
 
     let completedCount = 0;
 
@@ -170,11 +193,11 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (w.completed) {
         cards[index].classList.add('is-completed');
-        pillLights[index].className = `progress-light-pill active-win${index + 1}`;
+        pillLights[index].className = `progress-indicator-dot active-win${index + 1}`;
         completedCount++;
       } else {
         cards[index].classList.remove('is-completed');
-        pillLights[index].className = 'progress-light-pill';
+        pillLights[index].className = 'progress-indicator-dot';
       }
 
       if (w.focusSeconds && w.focusSeconds > 0) {
@@ -189,20 +212,35 @@ document.addEventListener('DOMContentLoaded', () => {
     progressFraction.textContent = `${completedCount}/3`;
 
     if (completedCount === 3) {
-      progressTitle.textContent = '🏆 Triple Win!';
-      progressDesc.textContent = 'Incredible focus! You crushed all 3 outcomes.';
+      progressTitle.textContent = '🏆 Triple Win Achieved!';
+      progressDesc.textContent = 'All 3 major priorities conquered today!';
     } else if (completedCount === 2) {
-      progressTitle.textContent = '🔥 2 of 3 Done';
-      progressDesc.textContent = 'Finish strong with your last priority!';
+      progressTitle.textContent = '⚡ 2 of 3 Completed';
+      progressDesc.textContent = 'One more win to complete your day!';
     } else if (completedCount === 1) {
-      progressTitle.textContent = '⚡ 1 of 3 Done';
-      progressDesc.textContent = 'Great momentum! Keep it going.';
+      progressTitle.textContent = '🎯 1 of 3 Completed';
+      progressDesc.textContent = 'Great momentum! Keep pushing forward.';
     } else {
-      progressTitle.textContent = 'Wins Complete';
-      progressDesc.textContent = 'Lock in your 3 essential outcomes';
+      progressTitle.textContent = 'Wins Completed';
+      progressDesc.textContent = 'Focus on what truly moves the needle';
     }
 
     reflectionInput.value = day.reflection || '';
+    refreshIcons();
+  }
+
+  function updateQuickDayPills(dateKey, todayKey) {
+    const [y, m, d] = todayKey.split('-').map(Number);
+    
+    const yesterdayObj = new Date(y, m - 1, d - 1);
+    const yesterdayKey = `${yesterdayObj.getFullYear()}-${String(yesterdayObj.getMonth() + 1).padStart(2, '0')}-${String(yesterdayObj.getDate()).padStart(2, '0')}`;
+    
+    const tomorrowObj = new Date(y, m - 1, d + 1);
+    const tomorrowKey = `${tomorrowObj.getFullYear()}-${String(tomorrowObj.getMonth() + 1).padStart(2, '0')}-${String(tomorrowObj.getDate()).padStart(2, '0')}`;
+
+    if (btnJumpYesterday) btnJumpYesterday.classList.toggle('active', dateKey === yesterdayKey);
+    if (btnJumpToday) btnJumpToday.classList.toggle('active', dateKey === todayKey);
+    if (btnJumpTomorrow) btnJumpTomorrow.classList.toggle('active', dateKey === tomorrowKey);
   }
 
   function updateStreakDisplay() {
@@ -232,10 +270,10 @@ document.addEventListener('DOMContentLoaded', () => {
             syncStatusText.textContent = 'Syncing...';
           } else if (isSynced) {
             syncDot.className = 'sync-dot synced';
-            syncStatusText.textContent = 'Cloud Synced';
+            syncStatusText.textContent = 'Sync';
           } else if (status === 'local_only') {
             syncDot.className = 'sync-dot';
-            syncStatusText.textContent = 'Local Only';
+            syncStatusText.textContent = 'Local';
           } else {
             syncDot.className = 'sync-dot';
             syncStatusText.textContent = 'Offline';
@@ -312,7 +350,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ===================================================================
-     CAPSULE DATE NAVIGATION
+     DATE NAVIGATION & QUICK JUMP PILLS
      =================================================================== */
 
   function shiftDate(daysOffset) {
@@ -327,23 +365,41 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDay(currentDateKey);
   }
 
+  function setDateOffsetFromToday(daysOffset) {
+    window.soundEngine.playPop();
+    const todayKey = window.storageManager.getTodayKey();
+    const [y, m, d] = todayKey.split('-').map(Number);
+    const date = new Date(y, m - 1, d + daysOffset);
+    const newY = date.getFullYear();
+    const newM = String(date.getMonth() + 1).padStart(2, '0');
+    const newD = String(date.getDate()).padStart(2, '0');
+    currentDateKey = `${newY}-${newM}-${newD}`;
+    renderDay(currentDateKey);
+  }
+
   if (btnPrevDay) btnPrevDay.addEventListener('click', () => shiftDate(-1));
   if (btnNextDay) btnNextDay.addEventListener('click', () => shiftDate(1));
   if (btnPrevDayDesktop) btnPrevDayDesktop.addEventListener('click', () => shiftDate(-1));
   if (btnNextDayDesktop) btnNextDayDesktop.addEventListener('click', () => shiftDate(1));
-  
-  if (currentDateLabelMobile) {
-    currentDateLabelMobile.addEventListener('click', () => {
-      window.soundEngine.playPop();
-      currentDateKey = window.storageManager.getTodayKey();
-      renderDay(currentDateKey);
+
+  if (btnJumpYesterday) btnJumpYesterday.addEventListener('click', () => setDateOffsetFromToday(-1));
+  if (btnJumpToday) btnJumpToday.addEventListener('click', () => setDateOffsetFromToday(0));
+  if (btnJumpTomorrow) btnJumpTomorrow.addEventListener('click', () => setDateOffsetFromToday(1));
+
+  if (btnMobileCalendarTrigger) {
+    btnMobileCalendarTrigger.addEventListener('click', () => {
+      openHistoryModal();
+      // Switch to calendar tab directly
+      const calTabBtn = document.querySelector('.modal-tab-btn[data-tab="tab-calendar"]');
+      if (calTabBtn) calTabBtn.click();
     });
   }
-  if (currentDateLabelDesktop) {
-    currentDateLabelDesktop.addEventListener('click', () => {
-      window.soundEngine.playPop();
-      currentDateKey = window.storageManager.getTodayKey();
-      renderDay(currentDateKey);
+
+  if (btnCurrentDateDesktop) {
+    btnCurrentDateDesktop.addEventListener('click', () => {
+      openHistoryModal();
+      const calTabBtn = document.querySelector('.modal-tab-btn[data-tab="tab-calendar"]');
+      if (calTabBtn) calTabBtn.click();
     });
   }
 
@@ -357,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (dockParkingBadge) {
       if (items.length > 0) {
-        dockParkingBadge.style.display = 'block';
+        dockParkingBadge.style.display = 'flex';
         dockParkingBadge.textContent = items.length;
       } else {
         dockParkingBadge.style.display = 'none';
@@ -368,8 +424,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (items.length === 0) {
       parkingList.innerHTML = `
-        <div style="text-align:center; padding:2rem 1rem; color:var(--text-muted); font-size:0.9rem;">
-          No parked thoughts. Add ideas here to keep today's 3 Wins pure.
+        <div style="text-align:center; padding:2rem 1rem; color:var(--text-muted); font-size:0.88rem;">
+          No parked tasks. Jot down ideas or secondary chores here.
         </div>
       `;
       return;
@@ -380,9 +436,9 @@ document.addEventListener('DOMContentLoaded', () => {
       el.className = 'parking-item';
       el.innerHTML = `
         <span class="parking-item-text">${escapeHtml(item.title)}</span>
-        <div class="parking-actions">
+        <div style="display:flex; align-items:center; gap:0.4rem;">
           <button class="promote-btn" data-id="${item.id}" title="Promote to an empty Win slot">Promote ↑</button>
-          <button class="delete-park-btn icon-btn" data-delete-id="${item.id}" style="width:28px;height:28px;" title="Delete">✕</button>
+          <button class="delete-park-btn" data-delete-id="${item.id}" title="Delete">✕</button>
         </div>
       `;
       parkingList.appendChild(el);
@@ -471,12 +527,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     activeFocusWinIndex = winIndex;
-    zenSlotTag.textContent = `🎯 WIN #${winIndex + 1} • ${win.tag.toUpperCase()}`;
+    zenSlotTag.textContent = `🎯 #${winIndex + 1} ${win.tag ? win.tag.toUpperCase() : 'PRIORITY'}`;
     zenSlotTag.className = `win-tag tag-win-${winIndex + 1}`;
     zenTaskTitle.textContent = win.title;
     
     resetZenTimer();
     zenOverlay.classList.add('open');
+    refreshIcons();
   }
 
   function closeZenMode() {
@@ -507,7 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function startZenTimer() {
     if (isTimerRunning) return;
     isTimerRunning = true;
-    btnZenTimerToggle.textContent = 'Pause';
+    btnZenTimerToggle.querySelector('span').textContent = 'Pause';
     window.soundEngine.playPop();
 
     focusTimerInterval = setInterval(() => {
@@ -532,7 +589,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function pauseZenTimer() {
     isTimerRunning = false;
-    btnZenTimerToggle.textContent = 'Start Focus';
+    btnZenTimerToggle.querySelector('span').textContent = 'Start Focus';
     clearInterval(focusTimerInterval);
   }
 
@@ -605,6 +662,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.historyViewer.renderJournal(journalWrapper, journalSearchInput.value);
 
     historyModalOverlay.classList.add('open');
+    refreshIcons();
   }
 
   btnHistoryModal.addEventListener('click', openHistoryModal);
@@ -627,6 +685,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (tabId === 'tab-overview') window.historyViewer.renderHeatmap(heatmapWrapper);
       if (tabId === 'tab-calendar') window.historyViewer.renderMonthlyCalendar(calendarWrapper, 0);
       if (tabId === 'tab-journal') window.historyViewer.renderJournal(journalWrapper, journalSearchInput.value);
+      refreshIcons();
     });
   });
 
@@ -656,6 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.soundEngine.playPop();
     updateSyncModalUi();
     syncModalOverlay.classList.add('open');
+    refreshIcons();
   }
 
   if (btnSyncModal) btnSyncModal.addEventListener('click', openSyncModal);
@@ -712,16 +772,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
     applyTheme(themes[nextIndex]);
     showToast(`Theme: ${themes[nextIndex].toUpperCase()}`);
+    refreshIcons();
   });
 
   function updateSoundIcon() {
     if (window.soundEngine.enabled) {
-      iconSoundOn.style.display = 'block';
-      iconSoundOff.style.display = 'none';
+      if (iconSoundOn) iconSoundOn.style.display = 'inline-flex';
+      if (iconSoundOff) iconSoundOff.style.display = 'none';
     } else {
-      iconSoundOn.style.display = 'none';
-      iconSoundOff.style.display = 'block';
+      if (iconSoundOn) iconSoundOn.style.display = 'none';
+      if (iconSoundOff) iconSoundOff.style.display = 'inline-flex';
     }
+    refreshIcons();
   }
 
   btnSoundToggle.addEventListener('click', () => {

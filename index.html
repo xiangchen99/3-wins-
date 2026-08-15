@@ -8,10 +8,16 @@
   
   <!-- PWA Meta Tags -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#090c13" />
+  <meta name="theme-color" content="#09090b" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Three Wins" />
+  
+  <!-- Fonts & Lucide Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
   
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/styles.css" />
@@ -19,203 +25,204 @@
 </head>
 <body>
 
-  <!-- Main App Shell -->
+  <!-- Main App Shell (Shadcn Zinc Minimalist Container) -->
   <div class="app-container">
     
     <!-- Top Header -->
     <header class="top-header">
       <div class="brand-section">
-        <div class="brand-badge" title="Rule of Three">3W</div>
+        <div class="brand-badge">
+          <i data-lucide="award" class="brand-icon"></i>
+        </div>
         <div class="brand-text-group">
           <h1 class="brand-title">Three Wins</h1>
-          <p class="brand-subtitle">Maximum focus. Zero overload.</p>
+          <p class="brand-subtitle">Daily Focus Tracker</p>
         </div>
       </div>
 
-      <!-- Desktop-Only Center Date Capsule -->
-      <div class="date-capsule desktop-only-capsule">
-        <button id="btn-prev-day-desktop" class="capsule-btn" title="Previous Day">‹</button>
-        <span id="current-date-label-desktop" class="capsule-text">Today</span>
-        <button id="btn-next-day-desktop" class="capsule-btn" title="Next Day">›</button>
+      <!-- Desktop Center Date Switcher -->
+      <div class="desktop-date-nav">
+        <button id="btn-prev-day-desktop" class="nav-arrow-btn" aria-label="Previous Day" title="Previous Day">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        <button id="btn-current-date-desktop" class="date-display-btn" title="Open Calendar">
+          <i data-lucide="calendar" class="date-icon"></i>
+          <span id="current-date-label-desktop">Today</span>
+        </button>
+        <button id="btn-next-day-desktop" class="nav-arrow-btn" aria-label="Next Day" title="Next Day">
+          <i data-lucide="chevron-right"></i>
+        </button>
       </div>
 
       <div class="header-actions">
         <!-- Streak Badge -->
         <div id="streak-badge" class="badge-streak" title="Consecutive Triple Win Days">
-          <span>🔥</span>
+          <i data-lucide="flame" class="streak-icon"></i>
           <span id="streak-count">0</span>
           <span class="streak-label-text">days</span>
         </div>
 
-        <!-- Desktop-Only Cloud Sync Button -->
-        <button id="btn-sync-modal" class="sync-badge desktop-only-btn" title="Cloudflare Cloud Sync" aria-label="Cloud Sync">
+        <!-- Desktop Cloud Sync Button -->
+        <button id="btn-sync-modal" class="shadcn-btn-outline desktop-only-btn" title="Cloudflare Cloud Sync" aria-label="Cloud Sync">
+          <i data-lucide="cloud" class="btn-icon"></i>
+          <span id="sync-status-text">Sync</span>
           <span id="sync-dot" class="sync-dot synced"></span>
-          <span id="sync-status-text">Cloud Sync</span>
         </button>
 
         <!-- Sound Toggle -->
-        <button id="btn-sound-toggle" class="icon-btn" title="Toggle Sound (M)" aria-label="Toggle Sound">
-          <svg id="icon-sound-on" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-          </svg>
-          <svg id="icon-sound-off" style="display:none;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
+        <button id="btn-sound-toggle" class="shadcn-icon-btn" title="Toggle Sound (M)" aria-label="Toggle Sound">
+          <i data-lucide="volume-2" id="icon-sound-on"></i>
+          <i data-lucide="volume-x" id="icon-sound-off" style="display:none;"></i>
         </button>
 
         <!-- Theme Switcher -->
-        <button id="btn-theme-toggle" class="icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
+        <button id="btn-theme-toggle" class="shadcn-icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
+          <i data-lucide="sun-moon" id="icon-theme"></i>
         </button>
 
-        <!-- Desktop-Only History Button -->
-        <button id="btn-history-modal" class="icon-btn desktop-only-btn" title="Visual Goal History, Heatmap & Calendar" aria-label="Goal History">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
+        <!-- Desktop History Button -->
+        <button id="btn-history-modal" class="shadcn-icon-btn desktop-only-btn" title="Goal History & Analytics" aria-label="Goal History">
+          <i data-lucide="bar-chart-2"></i>
         </button>
       </div>
     </header>
 
-    <!-- Mobile-Dedicated Date Switcher Bar (Guarantees zero wrapping or squishing) -->
-    <div class="mobile-date-bar">
-      <button id="btn-prev-day" class="mobile-date-nav-btn" aria-label="Previous Day">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-      <div id="current-date-label" class="mobile-date-text">Today</div>
-      <button id="btn-next-day" class="mobile-date-nav-btn" aria-label="Next Day">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
+    <!-- SHADCN MOBILE DATE CONTROLLER (Large touch targets, effortless clicking) -->
+    <div class="mobile-date-card">
+      <div class="date-picker-row">
+        <button id="btn-prev-day" class="date-chevron-btn" aria-label="Previous Day">
+          <i data-lucide="chevron-left"></i>
+        </button>
+        
+        <button id="btn-mobile-calendar-trigger" class="date-center-pill" title="Tap to jump to today or view calendar">
+          <i data-lucide="calendar" class="date-calendar-icon"></i>
+          <span id="current-date-label" class="date-title-text">Today</span>
+        </button>
+
+        <button id="btn-next-day" class="date-chevron-btn" aria-label="Next Day">
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+
+      <!-- Quick Day Jump Segmented Pills -->
+      <div class="quick-days-segment">
+        <button id="btn-jump-yesterday" class="quick-day-btn" data-offset="-1">Yesterday</button>
+        <button id="btn-jump-today" class="quick-day-btn active" data-offset="0">Today</button>
+        <button id="btn-jump-tomorrow" class="quick-day-btn" data-offset="1">Tomorrow</button>
+      </div>
     </div>
 
-    <!-- Hero Progress Card (Dual Zone with Indicator Light Pills) -->
+    <!-- Hero Progress Card (Dual Zone with Shadcn Indicator Lights) -->
     <section id="hero-progress-card" class="hero-progress-card">
       <div class="progress-left-zone">
         <div id="progress-fraction" class="progress-fraction-badge">0/3</div>
         <div class="progress-text-block">
-          <div id="progress-title" class="progress-label-text">Wins Complete</div>
-          <div id="progress-desc" class="progress-sub-text">Lock in your 3 essential outcomes</div>
+          <div id="progress-title" class="progress-label-text">Wins Completed</div>
+          <div id="progress-desc" class="progress-sub-text">Focus on what truly moves the needle</div>
         </div>
       </div>
       <div class="progress-right-zone">
-        <div id="pill-light-0" class="progress-light-pill" title="Win #1 Light"></div>
-        <div id="pill-light-1" class="progress-light-pill" title="Win #2 Light"></div>
-        <div id="pill-light-2" class="progress-light-pill" title="Win #3 Light"></div>
+        <div id="pill-light-0" class="progress-indicator-dot" title="Win #1 Light"></div>
+        <div id="pill-light-1" class="progress-indicator-dot" title="Win #2 Light"></div>
+        <div id="pill-light-2" class="progress-indicator-dot" title="Win #3 Light"></div>
       </div>
     </section>
 
     <!-- 3 Core Wins Grid -->
     <main class="wins-grid" id="wins-container">
       <!-- Win 1 (Radiant Coral Ruby) -->
-      <article class="win-card" id="card-win-0" data-index="0">
+      <article class="win-card win-slot-1" id="card-win-0" data-index="0">
         <button class="win-toggle-btn" id="btn-toggle-0" aria-label="Mark Win 1 as completed" title="Toggle completion (Press 1)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
+          <i data-lucide="check" class="check-icon"></i>
         </button>
         <div class="win-content">
           <div class="win-header-meta">
-            <span class="win-tag tag-win-1">🎯 #1 PRIORITY</span>
+            <span class="win-tag tag-win-1">
+              <i data-lucide="target" class="tag-icon"></i>
+              <span>#1 Priority</span>
+            </span>
+            <button class="zen-pill-btn" id="focus-btn-0" title="Launch Zen Focus Mode">
+              <i data-lucide="timer" class="zen-icon"></i>
+              <span>Focus</span>
+              <span class="time-badge" id="time-badge-0" style="display:none;">• <span>0m</span></span>
+            </button>
           </div>
           <div class="win-input-wrapper">
-            <input type="text" class="win-input" id="input-win-0" placeholder="Your #1 priority today..." autocomplete="off" />
+            <input type="text" class="win-input" id="input-win-0" placeholder="Your highest impact outcome..." autocomplete="off" />
           </div>
-          <button class="zen-pill-btn" id="focus-btn-0" title="Launch Zen Focus Mode">
-            <span>🌿</span>
-            <span>Zen Focus</span>
-            <span class="time-badge" id="time-badge-0" style="display:none; margin-left:0.3rem;">• <span>0m</span></span>
-          </button>
         </div>
       </article>
 
       <!-- Win 2 (Electric Azure Cyan) -->
-      <article class="win-card" id="card-win-1" data-index="1">
+      <article class="win-card win-slot-2" id="card-win-1" data-index="1">
         <button class="win-toggle-btn" id="btn-toggle-1" aria-label="Mark Win 2 as completed" title="Toggle completion (Press 2)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
+          <i data-lucide="check" class="check-icon"></i>
         </button>
         <div class="win-content">
           <div class="win-header-meta">
-            <span class="win-tag tag-win-2">⚡ #2 MILESTONE</span>
+            <span class="win-tag tag-win-2">
+              <i data-lucide="zap" class="tag-icon"></i>
+              <span>#2 Milestone</span>
+            </span>
+            <button class="zen-pill-btn" id="focus-btn-1" title="Launch Zen Focus Mode">
+              <i data-lucide="timer" class="zen-icon"></i>
+              <span>Focus</span>
+              <span class="time-badge" id="time-badge-1" style="display:none;">• <span>0m</span></span>
+            </button>
           </div>
           <div class="win-input-wrapper">
-            <input type="text" class="win-input" id="input-win-1" placeholder="Key milestone to hit..." autocomplete="off" />
+            <input type="text" class="win-input" id="input-win-1" placeholder="Your second critical achievement..." autocomplete="off" />
           </div>
-          <button class="zen-pill-btn" id="focus-btn-1" title="Launch Zen Focus Mode">
-            <span>🌿</span>
-            <span>Zen Focus</span>
-            <span class="time-badge" id="time-badge-1" style="display:none; margin-left:0.3rem;">• <span>0m</span></span>
-          </button>
         </div>
       </article>
 
       <!-- Win 3 (Royal Violet Amethyst) -->
-      <article class="win-card" id="card-win-2" data-index="2">
+      <article class="win-card win-slot-3" id="card-win-2" data-index="2">
         <button class="win-toggle-btn" id="btn-toggle-2" aria-label="Mark Win 3 as completed" title="Toggle completion (Press 3)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
+          <i data-lucide="check" class="check-icon"></i>
         </button>
         <div class="win-content">
           <div class="win-header-meta">
-            <span class="win-tag tag-win-3">✨ #3 ESSENTIAL</span>
+            <span class="win-tag tag-win-3">
+              <i data-lucide="sparkles" class="tag-icon"></i>
+              <span>#3 Essential</span>
+            </span>
+            <button class="zen-pill-btn" id="focus-btn-2" title="Launch Zen Focus Mode">
+              <i data-lucide="timer" class="zen-icon"></i>
+              <span>Focus</span>
+              <span class="time-badge" id="time-badge-2" style="display:none;">• <span>0m</span></span>
+            </button>
           </div>
           <div class="win-input-wrapper">
-            <input type="text" class="win-input" id="input-win-2" placeholder="Essential task to finish..." autocomplete="off" />
+            <input type="text" class="win-input" id="input-win-2" placeholder="Your third essential task..." autocomplete="off" />
           </div>
-          <button class="zen-pill-btn" id="focus-btn-2" title="Launch Zen Focus Mode">
-            <span>🌿</span>
-            <span>Zen Focus</span>
-            <span class="time-badge" id="time-badge-2" style="display:none; margin-left:0.3rem;">• <span>0m</span></span>
-          </button>
         </div>
       </article>
     </main>
 
-    <!-- Daily Reflection (Indigo Theme) -->
+    <!-- Daily Reflection Section -->
     <section class="reflection-box">
       <div class="reflection-header">
         <span class="reflection-title">
-          <span>💭</span> Daily Reflection & Gratitude
+          <i data-lucide="book-open" class="reflection-icon"></i>
+          <span>Daily Reflection</span>
         </span>
-        <span style="font-size:0.75rem; color:var(--text-muted);">Synced to Cloud</span>
+        <span class="reflection-sub">Auto-saved to cloud</span>
       </div>
-      <textarea id="reflection-input" class="reflection-input" placeholder="What went well today? What made your wins possible?" rows="2"></textarea>
+      <textarea id="reflection-input" class="reflection-input" placeholder="What went well today? Any key takeaways or thoughts?" rows="2"></textarea>
     </section>
 
     <!-- Desktop Bottom Action Bar -->
     <footer class="desktop-bottom-actions">
-      <div style="display:flex; gap:0.6rem; flex-wrap:wrap;">
-        <button id="btn-open-parking" class="primary-action-btn" title="Brain Dump / Backlog (D)">
-          <span style="color:var(--color-streak);">📥</span>
+      <div class="desktop-actions-left">
+        <button id="btn-open-parking" class="shadcn-btn-outline" title="Brain Dump / Backlog (D)">
+          <i data-lucide="inbox" class="btn-icon"></i>
           <span>Parking Lot</span>
-          <span id="parking-count-badge" style="font-size:0.75rem; background:var(--color-streak-soft); color:var(--color-streak); padding:0.1rem 0.45rem; border-radius:10px; font-weight:700;">0</span>
+          <span id="parking-count-badge" class="badge-count">0</span>
         </button>
 
-        <button id="btn-copy-markdown" class="primary-action-btn" title="Copy Today's Wins for Standup / Slack">
-          <span style="color:var(--color-win3);">📋</span>
+        <button id="btn-copy-markdown" class="shadcn-btn-outline" title="Copy Today's Wins for Standup / Slack">
+          <i data-lucide="copy" class="btn-icon"></i>
           <span>Copy for Standup</span>
         </button>
       </div>
@@ -223,7 +230,7 @@
       <div class="shortcuts-hint">
         <span>Shortcuts:</span>
         <span><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span> Toggle</span>
-        <span><span class="kbd">D</span> Dump</span>
+        <span><span class="kbd">D</span> Parking</span>
         <span><span class="kbd">T</span> Theme</span>
       </div>
     </footer>
@@ -231,48 +238,38 @@
   </div>
 
   <!-- ===================================================================
-       FLOATING FROSTED GLASS MOBILE DOCK (MULTI-COLOR ICON TILES)
+       SHADCN MOBILE BOTTOM NAVIGATION DOCK
        =================================================================== -->
   <nav class="mobile-bottom-dock" aria-label="Mobile Navigation">
-    <!-- Parking Lot Tab (Warm Amber) -->
+    <!-- Parking Lot Tab -->
     <button id="dock-btn-parking" class="dock-tab-btn" aria-label="Parking Lot">
-      <div class="dock-icon-tile tile-parking">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <rect x="3" y="3" width="18" height="18" rx="4" ry="4"></rect>
-          <path d="M9 17V7h4a3 3 0 0 1 0 6H9"></path>
-        </svg>
+      <div class="dock-icon-wrap tile-parking">
+        <i data-lucide="inbox"></i>
+        <span id="dock-parking-badge" class="dock-badge" style="display:none;">0</span>
       </div>
-      <span id="dock-parking-badge" class="dock-badge" style="display:none;">0</span>
       <span>Parking</span>
     </button>
 
-    <!-- Goal History Tab (Emerald Green) -->
+    <!-- Goal History Tab -->
     <button id="dock-btn-history" class="dock-tab-btn" aria-label="Goal History">
-      <div class="dock-icon-tile tile-history">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M12 20v-6M6 20V10M18 20V4"></path>
-        </svg>
+      <div class="dock-icon-wrap tile-history">
+        <i data-lucide="bar-chart-2"></i>
       </div>
-      <span>Heatmap</span>
+      <span>History</span>
     </button>
 
-    <!-- Cloud Sync Tab (Electric Cyan) -->
+    <!-- Cloud Sync Tab -->
     <button id="dock-btn-sync" class="dock-tab-btn" aria-label="Cloud Sync">
-      <div class="dock-icon-tile tile-sync">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
-        </svg>
+      <div class="dock-icon-wrap tile-sync">
+        <i data-lucide="cloud"></i>
       </div>
       <span>Sync</span>
     </button>
 
-    <!-- Standup Copy Tab (Royal Violet) -->
+    <!-- Standup Copy Tab -->
     <button id="dock-btn-standup" class="dock-tab-btn" aria-label="Copy Standup Markdown">
-      <div class="dock-icon-tile tile-standup">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-        </svg>
+      <div class="dock-icon-wrap tile-standup">
+        <i data-lucide="copy"></i>
       </div>
       <span>Standup</span>
     </button>
@@ -284,18 +281,20 @@
     <div class="sheet-handle"></div>
     <div class="drawer-header">
       <div class="drawer-title">
-        <span>📥</span>
+        <i data-lucide="inbox"></i>
         <span>Parking Lot / Backlog</span>
       </div>
-      <button id="btn-close-drawer" class="icon-btn" aria-label="Close drawer">✕</button>
+      <button id="btn-close-drawer" class="shadcn-icon-btn" aria-label="Close drawer">
+        <i data-lucide="x"></i>
+      </button>
     </div>
-    <p style="font-size:0.85rem; color:var(--text-secondary);">
+    <p class="drawer-desc">
       Keep today's 3 Wins uncluttered. Jot down extra thoughts, chores, and future tasks here.
     </p>
 
     <div class="drawer-input-row">
-      <input type="text" id="parking-input" class="drawer-input" placeholder="Add parked task or thought..." />
-      <button id="btn-add-parking" class="drawer-add-btn">Add</button>
+      <input type="text" id="parking-input" class="shadcn-input" placeholder="Add parked task or thought..." />
+      <button id="btn-add-parking" class="shadcn-btn-primary">Add</button>
     </div>
 
     <div id="parking-list" class="parking-list">
@@ -307,32 +306,43 @@
   <section id="zen-overlay" class="zen-overlay" aria-label="Zen Focus Mode">
     <div class="zen-top-bar">
       <div class="zen-badge">
-        <span>🌿</span>
+        <i data-lucide="compass"></i>
         <span>Deep Focus Mode</span>
       </div>
-      <button id="btn-exit-zen" class="icon-btn" title="Exit Zen Mode (Esc)">✕</button>
+      <button id="btn-exit-zen" class="shadcn-icon-btn" title="Exit Zen Mode (Esc)">
+        <i data-lucide="x"></i>
+      </button>
     </div>
 
     <div class="zen-center-content">
-      <span id="zen-slot-tag" class="win-tag tag-win-1">🎯 WIN #1</span>
+      <span id="zen-slot-tag" class="win-tag tag-win-1">🎯 #1 Priority</span>
       <h2 id="zen-task-title" class="zen-task-title">Task Title</h2>
       <div id="zen-timer-display" class="zen-timer-display">25:00</div>
 
       <div class="zen-timer-controls">
-        <button id="btn-zen-timer-toggle" class="zen-main-btn">Start Focus</button>
-        <button id="btn-zen-timer-reset" class="zen-secondary-btn">Reset</button>
-        <button id="btn-zen-complete" class="zen-secondary-btn" style="color:var(--color-zen); border-color:var(--color-zen);">Mark Complete ✓</button>
+        <button id="btn-zen-timer-toggle" class="zen-main-btn">
+          <i data-lucide="play" id="zen-play-icon"></i>
+          <span>Start Focus</span>
+        </button>
+        <button id="btn-zen-timer-reset" class="zen-secondary-btn">
+          <i data-lucide="rotate-ccw"></i>
+          <span>Reset</span>
+        </button>
+        <button id="btn-zen-complete" class="zen-complete-btn">
+          <i data-lucide="check"></i>
+          <span>Complete</span>
+        </button>
       </div>
     </div>
 
     <div class="zen-bottom-bar">
       <div class="zen-ambient-selector">
-        <span style="font-size:0.8rem; color:var(--text-muted); margin-right:0.3rem;">Soundscape:</span>
+        <span class="ambient-label">Soundscape:</span>
         <button class="ambient-pill active" data-ambient="off">None</button>
         <button class="ambient-pill" data-ambient="rain">🌧 Rain</button>
         <button class="ambient-pill" data-ambient="brown">🌊 Brown Noise</button>
       </div>
-      <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+      <div class="zen-preset-group">
         <button class="ambient-pill" data-time="1500">25m Pomodoro</button>
         <button class="ambient-pill" data-time="3000">50m Deep</button>
         <button class="ambient-pill" data-time="900">15m Sprint</button>
@@ -345,11 +355,16 @@
     <div class="modal-card">
       <div class="sheet-handle"></div>
       <div class="modal-header">
-        <h2 class="modal-title">📊 Goal History & Heatmap</h2>
-        <button id="btn-close-history-modal" class="icon-btn">✕</button>
+        <div class="modal-title-group">
+          <i data-lucide="bar-chart-2" class="modal-title-icon"></i>
+          <h2 class="modal-title">Goal History & Heatmap</h2>
+        </div>
+        <button id="btn-close-history-modal" class="shadcn-icon-btn">
+          <i data-lucide="x"></i>
+        </button>
       </div>
 
-      <!-- Modal Tabs -->
+      <!-- Modal Segmented Tabs -->
       <nav class="modal-tabs">
         <button class="modal-tab-btn active" data-tab="tab-overview">Heatmap</button>
         <button class="modal-tab-btn" data-tab="tab-calendar">Calendar</button>
@@ -358,34 +373,34 @@
 
       <!-- TAB 1: OVERVIEW & HEATMAP -->
       <div id="tab-overview" class="modal-tab-content">
-        <div class="stats-grid" style="margin-bottom:1.25rem;">
+        <div class="stats-grid">
           <div class="stat-item">
-            <div id="stat-current-streak" class="stat-num" style="color:var(--color-streak);">0</div>
+            <div id="stat-current-streak" class="stat-num color-streak">0</div>
             <div class="stat-label">Current Streak</div>
           </div>
           <div class="stat-item">
-            <div id="stat-best-streak" class="stat-num" style="color:var(--color-streak);">0</div>
+            <div id="stat-best-streak" class="stat-num color-streak">0</div>
             <div class="stat-label">Best Streak</div>
           </div>
           <div class="stat-item">
-            <div id="stat-triple-wins" class="stat-num" style="color:var(--color-zen);">0</div>
+            <div id="stat-triple-wins" class="stat-num color-zen">0</div>
             <div class="stat-label">Triple Wins 🏆</div>
           </div>
           <div class="stat-item">
-            <div id="stat-total-wins" class="stat-num" style="color:var(--color-win2);">0</div>
-            <div class="stat-label">Total Wins Done</div>
+            <div id="stat-total-wins" class="stat-num color-win2">0</div>
+            <div class="stat-label">Total Wins</div>
           </div>
         </div>
 
         <div class="heatmap-container">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-weight:700; font-size:0.9rem;">52-Week Activity Grid</span>
+          <div class="heatmap-header">
+            <span class="heatmap-title">52-Week Activity Grid</span>
             <div class="heatmap-legend">
               <span>Less</span>
-              <span class="heatmap-cell" data-level="0" style="display:inline-block;"></span>
-              <span class="heatmap-cell" data-level="1" style="display:inline-block;"></span>
-              <span class="heatmap-cell" data-level="2" style="display:inline-block;"></span>
-              <span class="heatmap-cell" data-level="3" style="display:inline-block;"></span>
+              <span class="heatmap-cell" data-level="0"></span>
+              <span class="heatmap-cell" data-level="1"></span>
+              <span class="heatmap-cell" data-level="2"></span>
+              <span class="heatmap-cell" data-level="3"></span>
               <span>More</span>
             </div>
           </div>
@@ -405,9 +420,9 @@
       <!-- TAB 3: SEARCHABLE VICTORY JOURNAL -->
       <div id="tab-journal" class="modal-tab-content" style="display:none;">
         <div class="journal-search-row">
-          <input type="text" id="journal-search-input" class="drawer-input" placeholder="Search past wins or reflection notes..." />
+          <input type="text" id="journal-search-input" class="shadcn-input" placeholder="Search past wins or reflections..." />
         </div>
-        <div id="journal-wrapper" style="max-height:350px; overflow-y:auto; padding-right:0.25rem;">
+        <div id="journal-wrapper" class="journal-list-wrap">
           <!-- Journal dynamically injected -->
         </div>
       </div>
@@ -416,41 +431,44 @@
 
   <!-- CLOUDFLARE CLOUD SYNC MODAL -->
   <div id="sync-modal-overlay" class="modal-overlay">
-    <div class="modal-card" style="max-width:480px;">
+    <div class="modal-card sync-modal-card">
       <div class="sheet-handle"></div>
       <div class="modal-header">
-        <h2 class="modal-title">☁️ Cloudflare Cloud Sync</h2>
-        <button id="btn-close-sync-modal" class="icon-btn">✕</button>
+        <div class="modal-title-group">
+          <i data-lucide="cloud" class="modal-title-icon"></i>
+          <h2 class="modal-title">Cloudflare Sync</h2>
+        </div>
+        <button id="btn-close-sync-modal" class="shadcn-icon-btn">
+          <i data-lucide="x"></i>
+        </button>
       </div>
 
       <div class="sync-modal-body">
-        <p style="font-size:0.9rem; color:var(--text-secondary); line-height:1.4;">
-          Your tasks and history sync automatically across your phone and laptop using Cloudflare KV.
+        <p class="sync-desc">
+          Your tasks and streaks sync seamlessly in real time across your phone and laptop using Cloudflare KV.
         </p>
 
-        <div style="width:100%; background:var(--bg-main); border:1px solid var(--border-subtle); border-radius:12px; padding:1rem; text-align:left;">
-          <div style="font-size:0.85rem; font-weight:700; color:var(--color-win2); margin-bottom:0.35rem;">Sync Passcode / Master PIN</div>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.75rem;">
-            Enter the same PIN on your phone and laptop to access your tasks anywhere.
+        <div class="sync-card-panel">
+          <div class="sync-panel-title">Sync Passcode / Master PIN</div>
+          <p class="sync-panel-sub">
+            Enter the same PIN on any device to instantly load your tasks.
           </p>
-          <div style="display:flex; gap:0.5rem;">
-            <input type="text" id="input-sync-pin" class="drawer-input" placeholder="e.g. mysecret123" />
-            <button id="btn-save-sync-pin" class="drawer-add-btn" style="background:var(--color-win2);">Save PIN</button>
+          <div class="sync-input-row">
+            <input type="text" id="input-sync-pin" class="shadcn-input" placeholder="e.g. mysecret123" />
+            <button id="btn-save-sync-pin" class="shadcn-btn-primary">Save PIN</button>
           </div>
         </div>
 
-        <div id="quick-link-section" style="width:100%; text-align:left; display:none;">
-          <div style="font-size:0.85rem; font-weight:700; margin-bottom:0.35rem;">Magic Login Link for Phone</div>
-          <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem;">
-            Open this URL on your phone to log in with 1 tap:
-          </p>
-          <div style="display:flex; gap:0.5rem;">
-            <input type="text" id="quick-login-url" class="drawer-input" readonly style="font-size:0.8rem; color:var(--color-win2);" />
-            <button id="btn-copy-quick-url" class="primary-action-btn" style="padding:0.4rem 0.85rem; font-size:0.8rem;">Copy</button>
+        <div id="quick-link-section" class="quick-link-wrap" style="display:none;">
+          <div class="quick-link-title">Magic Login Link for Phone</div>
+          <p class="quick-link-sub">Open this URL on your phone to connect in 1 tap:</p>
+          <div class="quick-link-row">
+            <input type="text" id="quick-login-url" class="shadcn-input quick-url-input" readonly />
+            <button id="btn-copy-quick-url" class="shadcn-btn-outline">Copy</button>
           </div>
         </div>
 
-        <button id="btn-disconnect-sync" class="date-btn" style="color:var(--color-win1); border:1px solid var(--border-subtle); width:100%; padding:0.5rem; display:none;">
+        <button id="btn-disconnect-sync" class="disconnect-sync-btn" style="display:none;">
           Disconnect Cloud Sync
         </button>
       </div>

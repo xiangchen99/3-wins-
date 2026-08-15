@@ -1,4 +1,4 @@
-// Visual Goal History & Interactive Heatmap Controller
+// Visual Goal History & Interactive Heatmap Controller (Shadcn + Lucide Icons)
 
 class HistoryViewer {
   constructor() {
@@ -27,7 +27,7 @@ class HistoryViewer {
     const heatmapGrid = document.createElement('div');
     heatmapGrid.className = 'heatmap-grid';
 
-    // Day labels (Mon, Wed, Fri)
+    // Day labels (Sun, Tue, Thu, Sat)
     const labelsCol = document.createElement('div');
     labelsCol.className = 'heatmap-labels';
     labelsCol.innerHTML = `
@@ -41,7 +41,6 @@ class HistoryViewer {
     weeksWrapper.className = 'heatmap-weeks';
 
     let currentDay = new Date(startDate);
-    const dayCells = [];
 
     for (let w = 0; w < 53; w++) {
       const weekCol = document.createElement('div');
@@ -104,9 +103,15 @@ class HistoryViewer {
     const header = document.createElement('div');
     header.className = 'calendar-nav-header';
     header.innerHTML = `
-      <button id="cal-prev-month" class="date-btn">← Prev</button>
+      <button id="cal-prev-month" class="shadcn-btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
+        <i data-lucide="chevron-left" style="width:14px; height:14px;"></i>
+        <span>Prev</span>
+      </button>
       <span class="calendar-month-title">${monthName}</span>
-      <button id="cal-next-month" class="date-btn">Next →</button>
+      <button id="cal-next-month" class="shadcn-btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
+        <span>Next</span>
+        <i data-lucide="chevron-right" style="width:14px; height:14px;"></i>
+      </button>
     `;
     container.appendChild(header);
 
@@ -157,9 +162,9 @@ class HistoryViewer {
 
       cell.innerHTML = `
         <span class="cal-day-num">${day}</span>
-        <div class="cal-badge-row">
-          ${completedWins === 3 ? '<span class="cal-trophy">🏆</span>' : ''}
-          ${totalWinsWithTitle > 0 ? `<span class="cal-score ${completedWins === 3 ? 'score-max' : ''}">${completedWins}/3</span>` : ''}
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+          ${completedWins === 3 ? '<span style="font-size:0.75rem;">🏆</span>' : ''}
+          ${totalWinsWithTitle > 0 ? `<span class="cal-score ${completedWins === 3 ? 'score-max' : ''}" style="font-size:0.7rem; font-family:var(--font-mono);">${completedWins}/3</span>` : ''}
         </div>
       `;
 
@@ -181,6 +186,8 @@ class HistoryViewer {
     container.querySelector('#cal-next-month').addEventListener('click', () => {
       this.renderMonthlyCalendar(container, 1);
     });
+
+    if (window.lucide) window.lucide.createIcons();
   }
 
   // Render Searchable Victory Journal
@@ -198,7 +205,7 @@ class HistoryViewer {
     });
 
     if (filteredDates.length === 0) {
-      container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted);">No matching accomplishments found.</div>`;
+      container.innerHTML = `<div style="text-align:center; padding:2rem; color:var(--text-muted); font-size:0.88rem;">No matching accomplishments found.</div>`;
       return;
     }
 
@@ -208,34 +215,34 @@ class HistoryViewer {
       if (completedCount === 0 && !day.reflection) return;
 
       const card = document.createElement('div');
-      card.className = 'journal-card';
+      card.style.cssText = 'background:var(--bg-main); border:1px solid var(--border-subtle); border-radius:12px; padding:0.9rem 1rem; margin-bottom:0.75rem; display:flex; flex-direction:column; gap:0.5rem;';
 
       let winsHtml = '';
       day.wins.forEach((w, i) => {
         if (w.title.trim()) {
           winsHtml += `
-            <div class="journal-win-row ${w.completed ? 'completed' : ''}">
-              <span>${w.completed ? '✅' : '⬜'}</span>
-              <span style="font-weight:500;">Win #${i + 1}:</span>
-              <span>${escapeHtml(w.title)}</span>
+            <div style="display:flex; align-items:center; gap:0.5rem; font-size:0.85rem; color:${w.completed ? 'var(--text-primary)' : 'var(--text-muted)'};">
+              <span>${w.completed ? '✓' : '○'}</span>
+              <span style="font-weight:600; font-size:0.78rem;">#${i + 1}:</span>
+              <span style="${w.completed ? 'text-decoration:line-through; color:var(--text-muted);' : ''}">${escapeHtml(w.title)}</span>
             </div>
           `;
         }
       });
 
       card.innerHTML = `
-        <div class="journal-card-header">
-          <span class="journal-date">${window.storageManager.formatDisplayDate(dk)}</span>
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <span style="font-weight:700; font-size:0.9rem;">${window.storageManager.formatDisplayDate(dk)}</span>
           <div style="display:flex; align-items:center; gap:0.5rem;">
-            ${completedCount === 3 ? '<span class="today-pill" style="background:rgba(245,158,11,0.15); color:var(--accent-amber);">🏆 Triple Win</span>' : ''}
-            <span class="win-count-text" style="font-size:0.85rem;">${completedCount}/3</span>
-            <button class="date-btn" data-jump-journal="${dk}" style="font-size:0.75rem;">Open Day →</button>
+            ${completedCount === 3 ? '<span style="font-size:0.72rem; background:rgba(245,158,11,0.15); color:var(--color-streak); padding:0.1rem 0.4rem; border-radius:4px; font-weight:700;">🏆 Triple Win</span>' : ''}
+            <span style="font-size:0.8rem; font-family:var(--font-mono); color:var(--text-muted);">${completedCount}/3</span>
+            <button class="shadcn-btn-outline" data-jump-journal="${dk}" style="padding:0.2rem 0.55rem; font-size:0.72rem;">Open →</button>
           </div>
         </div>
-        <div class="journal-wins-body">
+        <div style="display:flex; flex-direction:column; gap:0.25rem;">
           ${winsHtml}
         </div>
-        ${day.reflection ? `<div class="journal-reflection-note">💭 <em>"${escapeHtml(day.reflection)}"</em></div>` : ''}
+        ${day.reflection ? `<div style="font-size:0.8rem; color:var(--color-reflection); font-style:italic; border-top:1px solid var(--border-subtle); padding-top:0.4rem;">💭 "${escapeHtml(day.reflection)}"</div>` : ''}
       `;
 
       container.appendChild(card);
@@ -249,6 +256,8 @@ class HistoryViewer {
         }
       });
     });
+
+    if (window.lucide) window.lucide.createIcons();
   }
 }
 
