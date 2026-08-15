@@ -42,14 +42,14 @@
 
       <!-- Desktop Center Date Switcher -->
       <div class="desktop-date-nav">
-        <button id="btn-prev-day-desktop" class="nav-arrow-btn" aria-label="Previous Day" title="Previous Day">
+        <button id="btn-prev-day-desktop" type="button" class="nav-arrow-btn" aria-label="Previous Day" title="Previous Day">
           <i data-lucide="chevron-left"></i>
         </button>
-        <button id="btn-current-date-desktop" class="date-display-btn" title="Open Calendar">
+        <button id="btn-current-date-desktop" type="button" class="date-display-btn" title="Open Calendar">
           <i data-lucide="calendar" class="date-icon"></i>
           <span id="current-date-label-desktop">Today</span>
         </button>
-        <button id="btn-next-day-desktop" class="nav-arrow-btn" aria-label="Next Day" title="Next Day">
+        <button id="btn-next-day-desktop" type="button" class="nav-arrow-btn" aria-label="Next Day" title="Next Day">
           <i data-lucide="chevron-right"></i>
         </button>
       </div>
@@ -63,25 +63,25 @@
         </div>
 
         <!-- Desktop Cloud Sync Button -->
-        <button id="btn-sync-modal" class="shadcn-btn-outline desktop-only-btn" title="Cloudflare Cloud Sync" aria-label="Cloud Sync">
+        <button id="btn-sync-modal" type="button" class="shadcn-btn-outline desktop-only-btn" title="Cloudflare Cloud Sync" aria-label="Cloud Sync">
           <i data-lucide="cloud" class="btn-icon"></i>
           <span id="sync-status-text">Sync</span>
           <span id="sync-dot" class="sync-dot synced"></span>
         </button>
 
         <!-- Sound Toggle -->
-        <button id="btn-sound-toggle" class="shadcn-icon-btn" title="Toggle Sound (M)" aria-label="Toggle Sound">
+        <button id="btn-sound-toggle" type="button" class="shadcn-icon-btn" title="Toggle Sound (M)" aria-label="Toggle Sound">
           <i data-lucide="volume-2" id="icon-sound-on"></i>
           <i data-lucide="volume-x" id="icon-sound-off" style="display:none;"></i>
         </button>
 
         <!-- Theme Switcher -->
-        <button id="btn-theme-toggle" class="shadcn-icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
+        <button id="btn-theme-toggle" type="button" class="shadcn-icon-btn" title="Toggle Theme (T)" aria-label="Toggle Theme">
           <i data-lucide="sun-moon" id="icon-theme"></i>
         </button>
 
         <!-- Desktop History Button -->
-        <button id="btn-history-modal" class="shadcn-icon-btn desktop-only-btn" title="Goal History & Analytics" aria-label="Goal History">
+        <button id="btn-history-modal" type="button" class="shadcn-icon-btn desktop-only-btn" title="Goal History & Analytics" aria-label="Goal History">
           <i data-lucide="bar-chart-2"></i>
         </button>
       </div>
@@ -90,25 +90,25 @@
     <!-- SHADCN MOBILE DATE CONTROLLER (Large touch targets, effortless clicking) -->
     <div class="mobile-date-card">
       <div class="date-picker-row">
-        <button id="btn-prev-day" class="date-chevron-btn" aria-label="Previous Day">
+        <button id="btn-prev-day" type="button" class="date-chevron-btn" aria-label="Previous Day">
           <i data-lucide="chevron-left"></i>
         </button>
         
-        <button id="btn-mobile-calendar-trigger" class="date-center-pill" title="Tap to jump to today or view calendar">
+        <button id="btn-mobile-calendar-trigger" type="button" class="date-center-pill" title="Tap to jump to today or view calendar">
           <i data-lucide="calendar" class="date-calendar-icon"></i>
           <span id="current-date-label" class="date-title-text">Today</span>
         </button>
 
-        <button id="btn-next-day" class="date-chevron-btn" aria-label="Next Day">
+        <button id="btn-next-day" type="button" class="date-chevron-btn" aria-label="Next Day">
           <i data-lucide="chevron-right"></i>
         </button>
       </div>
 
       <!-- Quick Day Jump Segmented Pills -->
       <div class="quick-days-segment">
-        <button id="btn-jump-yesterday" class="quick-day-btn" data-offset="-1">Yesterday</button>
-        <button id="btn-jump-today" class="quick-day-btn active" data-offset="0">Today</button>
-        <button id="btn-jump-tomorrow" class="quick-day-btn" data-offset="1">Tomorrow</button>
+        <button id="btn-jump-yesterday" type="button" class="quick-day-btn" data-offset="-1">Yesterday</button>
+        <button id="btn-jump-today" type="button" class="quick-day-btn active" data-offset="0">Today</button>
+        <button id="btn-jump-tomorrow" type="button" class="quick-day-btn" data-offset="1">Tomorrow</button>
       </div>
     </div>
 
@@ -132,7 +132,7 @@
     <main class="wins-grid" id="wins-container">
       <!-- Win 1 (Radiant Coral Ruby) -->
       <article class="win-card win-slot-1" id="card-win-0" data-index="0">
-        <button class="win-toggle-btn" id="btn-toggle-0" aria-label="Mark Win 1 as completed" title="Toggle completion (Press 1)">
+        <button class="win-toggle-btn" type="button" id="btn-toggle-0" aria-label="Mark Win 1 as completed" title="Toggle completion (Press 1)">
           <i data-lucide="check" class="check-icon"></i>
         </button>
         <div class="win-content">
@@ -141,7 +141,7 @@
               <i data-lucide="target" class="tag-icon"></i>
               <span>#1 Priority</span>
             </span>
-            <button class="zen-pill-btn" id="focus-btn-0" title="Launch Zen Focus Mode">
+            <button class="zen-pill-btn" type="button" id="focus-btn-0" title="Launch Zen Focus Mode">
               <i data-lucide="timer" class="zen-icon"></i>
               <span>Focus</span>
               <span class="time-badge" id="time-badge-0" style="display:none;">• <span>0m</span></span>
@@ -155,7 +155,7 @@
 
       <!-- Win 2 (Electric Azure Cyan) -->
       <article class="win-card win-slot-2" id="card-win-1" data-index="1">
-        <button class="win-toggle-btn" id="btn-toggle-1" aria-label="Mark Win 2 as completed" title="Toggle completion (Press 2)">
+        <button class="win-toggle-btn" type="button" id="btn-toggle-1" aria-label="Mark Win 2 as completed" title="Toggle completion (Press 2)">
           <i data-lucide="check" class="check-icon"></i>
         </button>
         <div class="win-content">
@@ -164,7 +164,7 @@
               <i data-lucide="zap" class="tag-icon"></i>
               <span>#2 Milestone</span>
             </span>
-            <button class="zen-pill-btn" id="focus-btn-1" title="Launch Zen Focus Mode">
+            <button class="zen-pill-btn" type="button" id="focus-btn-1" title="Launch Zen Focus Mode">
               <i data-lucide="timer" class="zen-icon"></i>
               <span>Focus</span>
               <span class="time-badge" id="time-badge-1" style="display:none;">• <span>0m</span></span>
@@ -178,7 +178,7 @@
 
       <!-- Win 3 (Royal Violet Amethyst) -->
       <article class="win-card win-slot-3" id="card-win-2" data-index="2">
-        <button class="win-toggle-btn" id="btn-toggle-2" aria-label="Mark Win 3 as completed" title="Toggle completion (Press 3)">
+        <button class="win-toggle-btn" type="button" id="btn-toggle-2" aria-label="Mark Win 3 as completed" title="Toggle completion (Press 3)">
           <i data-lucide="check" class="check-icon"></i>
         </button>
         <div class="win-content">
@@ -187,7 +187,7 @@
               <i data-lucide="sparkles" class="tag-icon"></i>
               <span>#3 Essential</span>
             </span>
-            <button class="zen-pill-btn" id="focus-btn-2" title="Launch Zen Focus Mode">
+            <button class="zen-pill-btn" type="button" id="focus-btn-2" title="Launch Zen Focus Mode">
               <i data-lucide="timer" class="zen-icon"></i>
               <span>Focus</span>
               <span class="time-badge" id="time-badge-2" style="display:none;">• <span>0m</span></span>
@@ -215,13 +215,13 @@
     <!-- Desktop Bottom Action Bar -->
     <footer class="desktop-bottom-actions">
       <div class="desktop-actions-left">
-        <button id="btn-open-parking" class="shadcn-btn-outline" title="Brain Dump / Backlog (D)">
+        <button id="btn-open-parking" type="button" class="shadcn-btn-outline" title="Brain Dump / Backlog (D)">
           <i data-lucide="inbox" class="btn-icon"></i>
           <span>Parking Lot</span>
           <span id="parking-count-badge" class="badge-count">0</span>
         </button>
 
-        <button id="btn-copy-markdown" class="shadcn-btn-outline" title="Copy Today's Wins for Standup / Slack">
+        <button id="btn-copy-markdown" type="button" class="shadcn-btn-outline" title="Copy Today's Wins for Standup / Slack">
           <i data-lucide="copy" class="btn-icon"></i>
           <span>Copy for Standup</span>
         </button>
@@ -242,7 +242,7 @@
        =================================================================== -->
   <nav class="mobile-bottom-dock" aria-label="Mobile Navigation">
     <!-- Parking Lot Tab -->
-    <button id="dock-btn-parking" class="dock-tab-btn" aria-label="Parking Lot">
+    <button id="dock-btn-parking" type="button" class="dock-tab-btn" aria-label="Parking Lot">
       <div class="dock-icon-wrap tile-parking">
         <i data-lucide="inbox"></i>
         <span id="dock-parking-badge" class="dock-badge" style="display:none;">0</span>
@@ -251,7 +251,7 @@
     </button>
 
     <!-- Goal History Tab -->
-    <button id="dock-btn-history" class="dock-tab-btn" aria-label="Goal History">
+    <button id="dock-btn-history" type="button" class="dock-tab-btn" aria-label="Goal History">
       <div class="dock-icon-wrap tile-history">
         <i data-lucide="bar-chart-2"></i>
       </div>
@@ -259,7 +259,7 @@
     </button>
 
     <!-- Cloud Sync Tab -->
-    <button id="dock-btn-sync" class="dock-tab-btn" aria-label="Cloud Sync">
+    <button id="dock-btn-sync" type="button" class="dock-tab-btn" aria-label="Cloud Sync">
       <div class="dock-icon-wrap tile-sync">
         <i data-lucide="cloud"></i>
       </div>
@@ -267,7 +267,7 @@
     </button>
 
     <!-- Standup Copy Tab -->
-    <button id="dock-btn-standup" class="dock-tab-btn" aria-label="Copy Standup Markdown">
+    <button id="dock-btn-standup" type="button" class="dock-tab-btn" aria-label="Copy Standup Markdown">
       <div class="dock-icon-wrap tile-standup">
         <i data-lucide="copy"></i>
       </div>
@@ -284,7 +284,7 @@
         <i data-lucide="inbox"></i>
         <span>Parking Lot / Backlog</span>
       </div>
-      <button id="btn-close-drawer" class="shadcn-icon-btn" aria-label="Close drawer">
+      <button id="btn-close-drawer" type="button" class="shadcn-icon-btn" aria-label="Close drawer">
         <i data-lucide="x"></i>
       </button>
     </div>
@@ -294,7 +294,7 @@
 
     <div class="drawer-input-row">
       <input type="text" id="parking-input" class="shadcn-input" placeholder="Add parked task or thought..." />
-      <button id="btn-add-parking" class="shadcn-btn-primary">Add</button>
+      <button id="btn-add-parking" type="button" class="shadcn-btn-primary">Add</button>
     </div>
 
     <div id="parking-list" class="parking-list">
@@ -309,7 +309,7 @@
         <i data-lucide="compass"></i>
         <span>Deep Focus Mode</span>
       </div>
-      <button id="btn-exit-zen" class="shadcn-icon-btn" title="Exit Zen Mode (Esc)">
+      <button id="btn-exit-zen" type="button" class="shadcn-icon-btn" title="Exit Zen Mode (Esc)">
         <i data-lucide="x"></i>
       </button>
     </div>
@@ -320,15 +320,15 @@
       <div id="zen-timer-display" class="zen-timer-display">25:00</div>
 
       <div class="zen-timer-controls">
-        <button id="btn-zen-timer-toggle" class="zen-main-btn">
+        <button id="btn-zen-timer-toggle" type="button" class="zen-main-btn">
           <i data-lucide="play" id="zen-play-icon"></i>
           <span>Start Focus</span>
         </button>
-        <button id="btn-zen-timer-reset" class="zen-secondary-btn">
+        <button id="btn-zen-timer-reset" type="button" class="zen-secondary-btn">
           <i data-lucide="rotate-ccw"></i>
           <span>Reset</span>
         </button>
-        <button id="btn-zen-complete" class="zen-complete-btn">
+        <button id="btn-zen-complete" type="button" class="zen-complete-btn">
           <i data-lucide="check"></i>
           <span>Complete</span>
         </button>
@@ -338,14 +338,14 @@
     <div class="zen-bottom-bar">
       <div class="zen-ambient-selector">
         <span class="ambient-label">Soundscape:</span>
-        <button class="ambient-pill active" data-ambient="off">None</button>
-        <button class="ambient-pill" data-ambient="rain">🌧 Rain</button>
-        <button class="ambient-pill" data-ambient="brown">🌊 Brown Noise</button>
+        <button class="ambient-pill active" type="button" data-ambient="off">None</button>
+        <button class="ambient-pill" type="button" data-ambient="rain">🌧 Rain</button>
+        <button class="ambient-pill" type="button" data-ambient="brown">🌊 Brown Noise</button>
       </div>
       <div class="zen-preset-group">
-        <button class="ambient-pill" data-time="1500">25m Pomodoro</button>
-        <button class="ambient-pill" data-time="3000">50m Deep</button>
-        <button class="ambient-pill" data-time="900">15m Sprint</button>
+        <button class="ambient-pill" type="button" data-time="1500">25m Pomodoro</button>
+        <button class="ambient-pill" type="button" data-time="3000">50m Deep</button>
+        <button class="ambient-pill" type="button" data-time="900">15m Sprint</button>
       </div>
     </div>
   </section>
@@ -359,16 +359,16 @@
           <i data-lucide="bar-chart-2" class="modal-title-icon"></i>
           <h2 class="modal-title">Goal History & Heatmap</h2>
         </div>
-        <button id="btn-close-history-modal" class="shadcn-icon-btn">
+        <button id="btn-close-history-modal" type="button" class="shadcn-icon-btn">
           <i data-lucide="x"></i>
         </button>
       </div>
 
       <!-- Modal Segmented Tabs -->
       <nav class="modal-tabs">
-        <button class="modal-tab-btn active" data-tab="tab-overview">Heatmap</button>
-        <button class="modal-tab-btn" data-tab="tab-calendar">Calendar</button>
-        <button class="modal-tab-btn" data-tab="tab-journal">Journal</button>
+        <button class="modal-tab-btn active" type="button" data-tab="tab-overview">Heatmap</button>
+        <button class="modal-tab-btn" type="button" data-tab="tab-calendar">Calendar</button>
+        <button class="modal-tab-btn" type="button" data-tab="tab-journal">Journal</button>
       </nav>
 
       <!-- TAB 1: OVERVIEW & HEATMAP -->
@@ -438,7 +438,7 @@
           <i data-lucide="cloud" class="modal-title-icon"></i>
           <h2 class="modal-title">Cloudflare Sync</h2>
         </div>
-        <button id="btn-close-sync-modal" class="shadcn-icon-btn">
+        <button id="btn-close-sync-modal" type="button" class="shadcn-icon-btn">
           <i data-lucide="x"></i>
         </button>
       </div>
@@ -455,7 +455,7 @@
           </p>
           <div class="sync-input-row">
             <input type="text" id="input-sync-pin" class="shadcn-input" placeholder="e.g. mysecret123" />
-            <button id="btn-save-sync-pin" class="shadcn-btn-primary">Save PIN</button>
+            <button id="btn-save-sync-pin" type="button" class="shadcn-btn-primary">Save PIN</button>
           </div>
         </div>
 
@@ -464,11 +464,11 @@
           <p class="quick-link-sub">Open this URL on your phone to connect in 1 tap:</p>
           <div class="quick-link-row">
             <input type="text" id="quick-login-url" class="shadcn-input quick-url-input" readonly />
-            <button id="btn-copy-quick-url" class="shadcn-btn-outline">Copy</button>
+            <button id="btn-copy-quick-url" type="button" class="shadcn-btn-outline">Copy</button>
           </div>
         </div>
 
-        <button id="btn-disconnect-sync" class="disconnect-sync-btn" style="display:none;">
+        <button id="btn-disconnect-sync" type="button" class="disconnect-sync-btn" style="display:none;">
           Disconnect Cloud Sync
         </button>
       </div>

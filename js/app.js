@@ -83,8 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Theme, Sound & Sync Buttons
   const btnThemeToggle = document.getElementById('btn-theme-toggle');
   const btnSoundToggle = document.getElementById('btn-sound-toggle');
-  const iconSoundOn = document.getElementById('icon-sound-on');
-  const iconSoundOff = document.getElementById('icon-sound-off');
   const btnSyncModal = document.getElementById('btn-sync-modal');
   const syncDot = document.getElementById('sync-dot');
   const syncStatusText = document.getElementById('sync-status-text');
@@ -144,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const zenTaskTitle = document.getElementById('zen-task-title');
   const zenTimerDisplay = document.getElementById('zen-timer-display');
   const btnZenTimerToggle = document.getElementById('btn-zen-timer-toggle');
-  const zenPlayIcon = document.getElementById('zen-play-icon');
   const btnZenTimerReset = document.getElementById('btn-zen-timer-reset');
   const btnZenComplete = document.getElementById('btn-zen-complete');
   const ambientButtons = document.querySelectorAll('[data-ambient]');
@@ -226,7 +223,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     reflectionInput.value = day.reflection || '';
-    refreshIcons();
   }
 
   function updateQuickDayPills(dateKey, todayKey) {
@@ -437,8 +433,8 @@ document.addEventListener('DOMContentLoaded', () => {
       el.innerHTML = `
         <span class="parking-item-text">${escapeHtml(item.title)}</span>
         <div style="display:flex; align-items:center; gap:0.4rem;">
-          <button class="promote-btn" data-id="${item.id}" title="Promote to an empty Win slot">Promote ↑</button>
-          <button class="delete-park-btn" data-delete-id="${item.id}" title="Delete">✕</button>
+          <button type="button" class="promote-btn" data-id="${item.id}" title="Promote to an empty Win slot">Promote ↑</button>
+          <button type="button" class="delete-park-btn" data-delete-id="${item.id}" title="Delete">✕</button>
         </div>
       `;
       parkingList.appendChild(el);
@@ -533,7 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     resetZenTimer();
     zenOverlay.classList.add('open');
-    refreshIcons();
   }
 
   function closeZenMode() {
@@ -564,7 +559,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function startZenTimer() {
     if (isTimerRunning) return;
     isTimerRunning = true;
-    btnZenTimerToggle.querySelector('span').textContent = 'Pause';
+    const textSpan = btnZenTimerToggle.querySelector('span');
+    if (textSpan) textSpan.textContent = 'Pause';
     window.soundEngine.playPop();
 
     focusTimerInterval = setInterval(() => {
@@ -589,7 +585,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function pauseZenTimer() {
     isTimerRunning = false;
-    btnZenTimerToggle.querySelector('span').textContent = 'Start Focus';
+    const textSpan = btnZenTimerToggle.querySelector('span');
+    if (textSpan) textSpan.textContent = 'Start Focus';
     clearInterval(focusTimerInterval);
   }
 
@@ -662,7 +659,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.historyViewer.renderJournal(journalWrapper, journalSearchInput.value);
 
     historyModalOverlay.classList.add('open');
-    refreshIcons();
   }
 
   btnHistoryModal.addEventListener('click', openHistoryModal);
@@ -685,7 +681,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (tabId === 'tab-overview') window.historyViewer.renderHeatmap(heatmapWrapper);
       if (tabId === 'tab-calendar') window.historyViewer.renderMonthlyCalendar(calendarWrapper, 0);
       if (tabId === 'tab-journal') window.historyViewer.renderJournal(journalWrapper, journalSearchInput.value);
-      refreshIcons();
     });
   });
 
@@ -715,7 +710,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.soundEngine.playPop();
     updateSyncModalUi();
     syncModalOverlay.classList.add('open');
-    refreshIcons();
   }
 
   if (btnSyncModal) btnSyncModal.addEventListener('click', openSyncModal);
@@ -772,10 +766,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextIndex = (themes.indexOf(currentTheme) + 1) % themes.length;
     applyTheme(themes[nextIndex]);
     showToast(`Theme: ${themes[nextIndex].toUpperCase()}`);
-    refreshIcons();
   });
 
   function updateSoundIcon() {
+    const iconSoundOn = document.getElementById('icon-sound-on');
+    const iconSoundOff = document.getElementById('icon-sound-off');
     if (window.soundEngine.enabled) {
       if (iconSoundOn) iconSoundOn.style.display = 'inline-flex';
       if (iconSoundOff) iconSoundOff.style.display = 'none';
@@ -783,7 +778,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (iconSoundOn) iconSoundOn.style.display = 'none';
       if (iconSoundOff) iconSoundOff.style.display = 'inline-flex';
     }
-    refreshIcons();
   }
 
   btnSoundToggle.addEventListener('click', () => {

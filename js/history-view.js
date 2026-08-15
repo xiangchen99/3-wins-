@@ -103,12 +103,12 @@ class HistoryViewer {
     const header = document.createElement('div');
     header.className = 'calendar-nav-header';
     header.innerHTML = `
-      <button id="cal-prev-month" class="shadcn-btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
+      <button id="cal-prev-month" type="button" class="shadcn-btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
         <i data-lucide="chevron-left" style="width:14px; height:14px;"></i>
         <span>Prev</span>
       </button>
       <span class="calendar-month-title">${monthName}</span>
-      <button id="cal-next-month" class="shadcn-btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
+      <button id="cal-next-month" type="button" class="shadcn-btn-outline" style="padding:0.35rem 0.75rem; font-size:0.8rem;">
         <span>Next</span>
         <i data-lucide="chevron-right" style="width:14px; height:14px;"></i>
       </button>
@@ -236,7 +236,7 @@ class HistoryViewer {
           <div style="display:flex; align-items:center; gap:0.5rem;">
             ${completedCount === 3 ? '<span style="font-size:0.72rem; background:rgba(245,158,11,0.15); color:var(--color-streak); padding:0.1rem 0.4rem; border-radius:4px; font-weight:700;">🏆 Triple Win</span>' : ''}
             <span style="font-size:0.8rem; font-family:var(--font-mono); color:var(--text-muted);">${completedCount}/3</span>
-            <button class="shadcn-btn-outline" data-jump-journal="${dk}" style="padding:0.2rem 0.55rem; font-size:0.72rem;">Open →</button>
+            <button type="button" class="shadcn-btn-outline" data-jump-journal="${dk}" style="padding:0.2rem 0.55rem; font-size:0.72rem;">Open →</button>
           </div>
         </div>
         <div style="display:flex; flex-direction:column; gap:0.25rem;">

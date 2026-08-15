@@ -184,13 +184,16 @@ button {
 }
 
 /* Lucide Icon Defaults */
-i[data-lucide] {
+i[data-lucide],
+svg.lucide {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 18px;
   height: 18px;
   stroke-width: 2px;
+  pointer-events: none;
+  flex-shrink: 0;
 }
 
 /* Container */
@@ -681,7 +684,14 @@ i[data-lucide] {
   width: 22px;
   height: 22px;
   stroke-width: 3px;
-  transition: transform var(--t-spring);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: transform var(--t-spring), opacity var(--t-fast);
+}
+
+.win-card.is-completed .check-icon {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .win-card.is-completed.win-slot-1 .win-toggle-btn {
@@ -1264,13 +1274,17 @@ i[data-lucide] {
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform var(--t-normal);
+  transition: transform var(--t-normal), visibility var(--t-normal);
   padding: 1.5rem;
   gap: 1.15rem;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .drawer-panel.open {
   transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .drawer-header {
@@ -1743,9 +1757,13 @@ i[data-lucide] {
     border-top: 1px solid var(--border-card);
     transform: translateY(100%);
     padding: 1.25rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .drawer-panel.open {
     transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
   }
 }
