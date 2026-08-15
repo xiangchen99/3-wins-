@@ -1,4 +1,4 @@
-// Core Application Controller for Three Wins Focus Tracker with Dual Design
+// Core Application Controller for Three Wins Focus Tracker with Multi-Color Dual Design
 
 document.addEventListener('DOMContentLoaded', () => {
   // Register Service Worker for PWA
@@ -19,23 +19,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // DOM Elements
   const htmlEl = document.documentElement;
-  const currentDateLabel = document.getElementById('current-date-label');
-  const todayPill = document.getElementById('today-pill');
+  const currentDateLabelMobile = document.getElementById('current-date-label');
+  const currentDateLabelDesktop = document.getElementById('current-date-label-desktop');
   const btnPrevDay = document.getElementById('btn-prev-day');
-  const btnToday = document.getElementById('btn-today');
   const btnNextDay = document.getElementById('btn-next-day');
+  const btnPrevDayDesktop = document.getElementById('btn-prev-day-desktop');
+  const btnNextDayDesktop = document.getElementById('btn-next-day-desktop');
   
   const streakBadge = document.getElementById('streak-badge');
   const streakCount = document.getElementById('streak-count');
   
-  const progressBanner = document.getElementById('progress-banner');
+  const progressFraction = document.getElementById('progress-fraction');
   const progressTitle = document.getElementById('progress-title');
   const progressDesc = document.getElementById('progress-desc');
-  const progressFraction = document.getElementById('progress-fraction');
-  const pills = [
-    document.getElementById('pill-0'),
-    document.getElementById('pill-1'),
-    document.getElementById('pill-2')
+  const pillLights = [
+    document.getElementById('pill-light-0'),
+    document.getElementById('pill-light-1'),
+    document.getElementById('pill-light-2')
   ];
 
   const cards = [
@@ -80,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const dockParkingBadge = document.getElementById('dock-parking-badge');
   const dockBtnHistory = document.getElementById('dock-btn-history');
   const dockBtnSync = document.getElementById('dock-btn-sync');
-  const dockSyncDot = document.getElementById('dock-sync-dot');
   const dockBtnStandup = document.getElementById('dock-btn-standup');
 
   // History Modal Elements
@@ -154,14 +153,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const day = window.storageManager.getDayRecord(dateKey);
     const todayKey = window.storageManager.getTodayKey();
 
-    currentDateLabel.textContent = window.storageManager.formatDisplayDate(dateKey);
-    if (dateKey === todayKey) {
-      todayPill.style.display = 'inline-block';
-      todayPill.textContent = 'Today';
-    } else {
-      todayPill.style.display = 'inline-block';
-      todayPill.textContent = dateKey > todayKey ? 'Future' : 'Past';
+    let dateText = 'Today';
+    if (dateKey !== todayKey) {
+      const [y, m, d] = dateKey.split('-').map(Number);
+      const dateObj = new Date(y, m - 1, d);
+      dateText = dateObj.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
     }
+
+    if (currentDateLabelMobile) currentDateLabelMobile.textContent = dateText;
+    if (currentDateLabelDesktop) currentDateLabelDesktop.textContent = dateText;
 
     let completedCount = 0;
 
@@ -170,40 +170,36 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (w.completed) {
         cards[index].classList.add('is-completed');
-        pills[index].classList.add('completed');
+        pillLights[index].className = `progress-light-pill active-win${index + 1}`;
         completedCount++;
       } else {
         cards[index].classList.remove('is-completed');
-        pills[index].classList.remove('completed');
+        pillLights[index].className = 'progress-light-pill';
       }
 
       if (w.focusSeconds && w.focusSeconds > 0) {
-        timeBadges[index].style.display = 'inline-flex';
+        timeBadges[index].style.display = 'inline';
         const mins = Math.round(w.focusSeconds / 60);
-        timeBadges[index].querySelector('span').textContent = `${mins}m focus`;
+        timeBadges[index].querySelector('span').textContent = `${mins}m`;
       } else {
         timeBadges[index].style.display = 'none';
       }
     });
 
-    progressFraction.textContent = `${completedCount} / 3`;
+    progressFraction.textContent = `${completedCount}/3`;
 
     if (completedCount === 3) {
-      progressBanner.classList.add('triple-win-active');
-      progressTitle.textContent = '🏆 Triple Win Achieved!';
-      progressDesc.textContent = 'Incredible focus! You conquered all 3 core priorities today.';
+      progressTitle.textContent = '🏆 Triple Win!';
+      progressDesc.textContent = 'Incredible focus! You crushed all 3 outcomes.';
     } else if (completedCount === 2) {
-      progressBanner.classList.remove('triple-win-active');
-      progressTitle.textContent = '🔥 Almost there!';
-      progressDesc.textContent = '2 of 3 wins in the bag. Finish the last priority strong!';
+      progressTitle.textContent = '🔥 2 of 3 Done';
+      progressDesc.textContent = 'Finish strong with your last priority!';
     } else if (completedCount === 1) {
-      progressBanner.classList.remove('triple-win-active');
-      progressTitle.textContent = '⚡ Momentum building!';
-      progressDesc.textContent = 'First win down! Lock in on your next priority.';
+      progressTitle.textContent = '⚡ 1 of 3 Done';
+      progressDesc.textContent = 'Great momentum! Keep it going.';
     } else {
-      progressBanner.classList.remove('triple-win-active');
-      progressTitle.textContent = "Today's Focus";
-      progressDesc.textContent = 'Lock in your 3 essential outcomes for today.';
+      progressTitle.textContent = 'Wins Complete';
+      progressDesc.textContent = 'Lock in your 3 essential outcomes';
     }
 
     reflectionInput.value = day.reflection || '';
@@ -212,11 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateStreakDisplay() {
     const stats = window.storageManager.calculateStats();
     streakCount.textContent = stats.currentStreak;
-    if (stats.currentStreak > 0) {
-      streakBadge.classList.add('active-streak');
-    } else {
-      streakBadge.classList.remove('active-streak');
-    }
   }
 
   /* ===================================================================
@@ -249,10 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
             syncDot.className = 'sync-dot';
             syncStatusText.textContent = 'Offline';
           }
-        }
-
-        if (dockSyncDot) {
-          dockSyncDot.style.background = isSynced ? 'var(--accent-primary)' : isSyncing ? 'var(--accent-amber)' : '#64748b';
         }
       });
       window.syncEngine.notifyStatus(window.syncEngine.status);
@@ -290,12 +277,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mobile Haptic feedback
     if (navigator.vibrate) {
-      navigator.vibrate(newStatus ? [25, 40, 30] : 15);
+      navigator.vibrate(newStatus ? [30, 45, 30] : 15);
     }
 
     if (newStatus) {
       window.soundEngine.playWinChime(index);
-      window.confettiEngine.burstAtElement(toggleBtns[index], 30);
+      window.confettiEngine.burstAtElement(toggleBtns[index], 32);
 
       const updatedDay = window.storageManager.getDayRecord(currentDateKey);
       const allDone = updatedDay.wins.every(w => w.completed);
@@ -325,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ===================================================================
-     DATE NAVIGATION
+     CAPSULE DATE NAVIGATION
      =================================================================== */
 
   function shiftDate(daysOffset) {
@@ -340,13 +327,25 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDay(currentDateKey);
   }
 
-  btnPrevDay.addEventListener('click', () => shiftDate(-1));
-  btnNextDay.addEventListener('click', () => shiftDate(1));
-  btnToday.addEventListener('click', () => {
-    window.soundEngine.playPop();
-    currentDateKey = window.storageManager.getTodayKey();
-    renderDay(currentDateKey);
-  });
+  if (btnPrevDay) btnPrevDay.addEventListener('click', () => shiftDate(-1));
+  if (btnNextDay) btnNextDay.addEventListener('click', () => shiftDate(1));
+  if (btnPrevDayDesktop) btnPrevDayDesktop.addEventListener('click', () => shiftDate(-1));
+  if (btnNextDayDesktop) btnNextDayDesktop.addEventListener('click', () => shiftDate(1));
+  
+  if (currentDateLabelMobile) {
+    currentDateLabelMobile.addEventListener('click', () => {
+      window.soundEngine.playPop();
+      currentDateKey = window.storageManager.getTodayKey();
+      renderDay(currentDateKey);
+    });
+  }
+  if (currentDateLabelDesktop) {
+    currentDateLabelDesktop.addEventListener('click', () => {
+      window.soundEngine.playPop();
+      currentDateKey = window.storageManager.getTodayKey();
+      renderDay(currentDateKey);
+    });
+  }
 
   /* ===================================================================
      PARKING LOT / BRAIN DUMP DRAWER
@@ -356,7 +355,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const items = window.storageManager.getParkingLot();
     parkingCountBadge.textContent = items.length;
     
-    // Update mobile dock badge
     if (dockParkingBadge) {
       if (items.length > 0) {
         dockParkingBadge.style.display = 'block';
