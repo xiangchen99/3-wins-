@@ -878,4 +878,9 @@ document.addEventListener('DOMContentLoaded', () => {
     div.textContent = str;
     return div.innerHTML;
   }
+
+  // Prevent accidental mobile pinch-to-zoom gestures (iOS Safari)
+  document.addEventListener('gesturestart', (e) => e.preventDefault());
+  document.addEventListener('gesturechange', (e) => e.preventDefault());
+  document.addEventListener('gestureend', (e) => e.preventDefault());
 });
